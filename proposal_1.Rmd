@@ -1,0 +1,34 @@
+---
+title: "proposal_1"
+author: "Christina Lyu"
+date: "10/2/2018"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# Group Members: Christina Lyu, Aoi 
+
+# Title: 
+
+Content
+Your initial and revised proposals should contain the following content:
+1. Group Members: List the members of your group
+2. Title: Your title
+3. Purpose: Describe the general topic/phenomenon you want to study, as well some focused questions
+that you hope to answer and specific hypotheses that you intend to assess.
+4. Data: Describe the data that you plan to use, with specifications of where it can be found (URL) and a
+short description. Eventually, you will probably want to combine data from multiple sources into one
+file. We will discuss data management techniques in the coming weeks, but for now you should simply
+list multiple sources if you have them.
+5. Population: Specify what the observational units are (i.e. the rows of the data frame), describe the
+larger population/phenomenon to which you’ll try to generalize, and (if appropriate) estimate roughly
+how many such individuals there are in the population.
+6. Response Variable: What the response variable? What are its units? Estimate the range of possible
+values that it may take on.
+7. Explanatory Variables: Describe the variables that you’ll examine for each observational unit (i.e. the
+columns of the data frame). Carefully define each variable and describe how each was measured.
+For categorical variables, list the possible categories; for quantitative variables, specify the units of
+measurement. You may want to add more variables later on, but you should have at least 5 variables
+already.

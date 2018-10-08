@@ -31,4 +31,4 @@ values that it may take on.
 columns of the data frame). Carefully define each variable and describe how each was measured.
 For categorical variables, list the possible categories; for quantitative variables, specify the units of
 measurement. You may want to add more variables later on, but you should have at least 5 variables
-already.
+already

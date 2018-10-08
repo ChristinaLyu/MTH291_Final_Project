@@ -1,0 +1,201 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={proposal\_1},
+            pdfauthor={Christina Lyu},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\newcommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+
+  \title{proposal\_1}
+    \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+    \author{Christina Lyu}
+    \preauthor{\centering\large\emph}
+  \postauthor{\par}
+      \predate{\centering\large\emph}
+  \postdate{\par}
+    \date{10/2/2018}
+
+
+\begin{document}
+\maketitle
+
+\section{Group Members:}\label{group-members}
+
+Christina Lyu, Aoi, Ahlam
+
+\section{Title:}\label{title}
+
+Relationship between Salaries after Graduation and Race, Major or Gender
+
+\section{Purpose:}\label{purpose}
+
+As college students, we work hard for our education and it is true to
+almost everyone that we would want to get a job one time or another.
+Therefore, we want to look at the factors that would affect ones salary.
+For example, it's very common that the people with computer science
+degrees might get jobs easier than people with art degrees. It is also
+common that people with higher degrees get higher salaries than people
+in the same field but with lower degrees. But majors aren't the only one
+with an influence. Despite the fact that we try to build a world with no
+discriminations, there still exist in the society different treatments
+for different people so we are also interested to see how races, gender
+would make change to the salaries.
+
+\section{Data:}\label{data}
+
+1.Our data was found on this website. Each row represent a specific
+major in a specific year, with columns representing different factors
+including teaching, student, male, white and so on. The numbers are the
+average yearly salaries for that factor. There lines with all 0s means
+that major was not created that year.
+\url{https://think.cs.vt.edu/corgis/csv/graduates/graduates.csv?forcedownload=1}
+
+2.The data has multiple categories that could have played a role in the
+salary of the individual, rather than just the major i.e.~year,
+minorities, gender, etc.
+
+\url{https://catalog.data.gov/dataset/current-employee-names-salaries-and-position-titles-840f7/resource/2b09fa08-c85e-4bbe-a90d-cdc4ae39b0cc}
+
+3.The data compares the salary for people who live in the city in
+Chicago. A flaw in us using this data is that this data is catered to
+Chicago, so we should be more specific if we want data for a specific
+city or just the national average.
+
+\url{https://cew.georgetown.edu/cew-reports/valueofcollegemajors/\#explore-data}
+
+4.This data is in response to the previous data presented. This specific
+data shows earning by state and includes the percentiles for the
+earnings. I think if we wanted to do a box-and-whisker plot for each
+state to show the data, it would be great to use the information from
+the data.
+
+\url{https://www.forbes.com/sites/susanadams/2015/07/02/the-college-majors-with-the-highest-starting-salaries/\#ed527cb35024}
+
+5.This data shows that our hypothesis was correct in which STEM majors
+make more than Humanities majors.
+\url{http://online.wsj.com/public/resources/documents/info-Degrees_that_Pay_you_Back-sort.html}
+
+6.This data shows a more extensive version of college majors, and it
+also shows the different percentiles for the salaries. With these
+percentiles, we can definitely compare the different majors and see if
+there are any significant differences.
+
+\url{https://www.glassdoor.com/blog/50-highest-paying-college-majors/}
+
+7.This data only focuses on the median salary, which is different than
+the previous dataset. This would show more about the middle 50\% of
+salaries, which would be good to not have any extreme values.
+
+\url{https://www.cnbc.com/2016/10/19/the-50-highest-paying-college-majors.html}
+
+8.The data shows the top 50 highest paying college majors, which would
+not include every major. This may or may not include certain categories
+in our hypothesis.
+
+9.The data below shows the expected salaries for undergraduates who
+majored in humanities and arts. It listed philosophy as the top paid
+major in the class of 2016 out of the other humanities and arts majors.
+
+\url{http://www.naceweb.org/job-market/compensation/philosophy-projected-as-top-paid-class-of-2016-humanities-major/}
+
+With all these differing data, I think we should narrow down the results
+to see if we want it to be by state or nationwide.
+
+\section{Population:}\label{population}
+
+The population of the study is everyone with a college degree and a job.
+Since there are columns called ``Bachelors'' and ``Masters'', which
+means we are taking samples with someone with at least a bachelors
+degree. The values under the columns represent the salaries one get so
+our sample must have jobs. The observation units are majors in different
+years. I'll try to generalize the predicted salary for people after they
+graduate based on their gender, race, major, degree and so on. There are
+517 rows of data in the data frame, but I'm sure there are majors that
+are not covered in the data.
+
+\section{Response Variable:}\label{response-variable}
+
+The response variable is the salary measured in units Dollar and has an
+approximate range of 1000 to 200,000.
+
+\section{Explanatory Variables:}\label{explanatory-variables}
+
+The explanatory variables can be many possible combinations including
+Student, Teaching, Whites, Male, Major, Bachelors and so on. We don't
+know which of them are statistically significant yet. They are all
+categorical variables so the actual values are 0 or 1. But in the data
+set, each element will have a corresponding salary as the mean salary
+for someone with the major that year who has a value of 1 for that
+factor.
+
+
+\end{document}

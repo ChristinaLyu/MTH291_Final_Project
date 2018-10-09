@@ -62,4 +62,4 @@ The response variable is the salary measured in units Dollar and has an approxim
 
 # Explanatory Variables:
 
-The explanatory variables can be many possible combinations including Student, Teaching, Whites, Male, Major, Bachelors and so on. We don't know which of them are statistically significant yet. They are all categorical variables so the actual values are 0 or 1. But in the data set, each element will have a corresponding salary as the mean salary for someone with the major that year who has a value of 1 for that factor.
+The explanatory variables for this data set include Type of Wealth of possible values "inherited" or "executive", Sector of possible values "media" or "construction", Citizenship of possible values "Japan" or "France", Characteristic of possible combinations of the values "North", "Founder", "Real Billionaires", Industry Aggregates of possible values "Financial" or "Traded Sectors", and Source of Wealth of possible values "Desigual" or "fast food", all cetegorical variables. There are also quantitative explanatory variables including Net Worth Billion with units of 1 billion dollars, GDP Currentus with a unit of 1 dollar. 

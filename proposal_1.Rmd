@@ -1,6 +1,6 @@
 ---
 title: "proposal_1"
-author: "Christina Lyu"
+author: "Christina Lyu, Aoi Ogawa, Ahlam"
 date: "10/2/2018"
 output: pdf_document
 ---

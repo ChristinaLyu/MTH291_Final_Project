@@ -6,7 +6,7 @@ output: pdf_document
 ---
 # Group Members: 
 
-Christina Lyu, Aoi, Ahlam
+Christina Lyu, Aoi Ogawa, Ahlam
 
 # Title: 
 

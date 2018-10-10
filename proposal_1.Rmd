@@ -10,7 +10,7 @@ Christina Lyu, Aoi, Ahlam
 
 # Title: 
 
-Relationship between Salaries after Graduation and Race, Major or Gender
+The characteristics of billionaires -- how to become an billionaire
 
 # Purpose:
 
@@ -54,9 +54,13 @@ With all these differing data, I think we should narrow down the results to see 
 
 # Population:
 
-The population of the study is everyone with a college degree and a job. Since there are columns called "Bachelors" and "Masters", which means we are taking samples with someone with at least a bachelors degree. The values under the columns represent the salaries one get so our sample must have jobs. The observation units are majors in different years. I'll try to generalize the predicted salary for people after they graduate based on their gender, race, major, degree and so on. There are 517 rows of data in the data frame, but I'm sure there are majors that are not covered in the data.
+The population of this study is people who are considered as a billionaire according to the book Rich People Poor Countries which the data runs from 1996-2014 and the data has been updated to reflect the latest using Forbes. There are 2615 rows which means 2615 people. 
+
 
 # Response Variable:
+
+The response variable is ....
+
 
 The response variable is the salary measured in units Dollar and has an approximate range of 1000 to 200,000.
 

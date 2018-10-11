@@ -6,7 +6,7 @@ output: pdf_document
 ---
 # Group Members: 
 
-Christina Lyu, Aoi Ogawa, Ahlam
+Christina Lyu, Aoi Ogawa, Ahlam El Mernissi
 
 # Title: 
 
@@ -14,7 +14,7 @@ The characteristics of billionaires -- how to become an billionaire
 
 # Purpose:
 
-As college students, we work hard for our education and it is true to almost everyone that we would want to get a job one time or another. Therefore, we want to look at the factors that would affect ones salary. For example, it's very common that the people with computer science degrees might get jobs easier than people with art degrees. It is also common that people with higher degrees get higher salaries than people in the same field but with lower degrees. But majors aren't the only one with an influence. Despite the fact that we try to build a world with no discriminations, there still exist in the society different treatments for different people so we are also interested to see how races, gender would make change to the salaries.
+Most of us wonder who are the billionaires, where are they from and how did they become billionaires. Therefore, we want to look at the characteristics of the world's billionaires, including are they female or male, or are they self made billionaires or did they inherit their wealth. Do such characteristics play a role in determining the net worth of the billionaires worldwide?
 
 # Data:
 
@@ -29,7 +29,7 @@ The population of this study is people who are considered as a billionaire accor
 
 # Response Variable:
 
-The response variable is the salary measured in units Dollar and has an approximate range of 1000 to 200,000.
+The response variable is the net worth in billion dollars. 
 
 # Explanatory Variables:
 

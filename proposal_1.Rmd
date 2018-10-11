@@ -24,13 +24,13 @@ The dataset presents the source of billionaires wealth and uses it to describe c
 
 # Population:
 
-The population of this study is people who are considered as a billionaire according to the book Rich People Poor Countries which the data runs from 1996-2014 and the data has been updated to reflect the latest using Forbes. There are 2615 rows which means 2615 people. 
+The population of this study is people who are considered as billionaires according to the book Rich People Poor Countries which the data runs from 1996-2014 and the data has been updated to reflect the latest using Forbes. There are 2615 rows which means 2615 people. 
 
 
 # Response Variable:
 
-The response variable is the net worth in billion dollars. 
+The response variable is the net worth in billion dollars with unit of 1 billion dollars. 
 
 # Explanatory Variables:
 
-The explanatory variables for this data set include Type of Wealth of possible values "inherited" or "executive", Sector of possible values "media" or "construction", Citizenship of possible values "Japan" or "France", Characteristic of possible combinations of the values "North", "Founder", "Real Billionaires", Industry Aggregates of possible values "Financial" or "Traded Sectors", and Source of Wealth of possible values "Desigual" or "fast food", all cetegorical variables. There are also quantitative explanatory variables including Net Worth Billion with units of 1 billion dollars, GDP Currentus with a unit of 1 dollar. 
+The explanatory variables for this data set include Type of Wealth of possible values "inherited" or "executive", Sector of possible values "media" or "construction", Citizenship of possible values "Japan" or "France", Characteristic of possible combinations of the values "North", "Founder", "Real Billionaires", Industry Aggregates of possible values "Financial" or "Traded Sectors", and Source of Wealth of possible values "Desigual" or "fast food", all cetegorical variables. There are also quantitative explanatory variables including GDP Currentus with a unit of 1 dollar. 

@@ -34,3 +34,10 @@ The response variable is the net worth in billion dollars with unit of 1 billion
 # Explanatory Variables:
 
 The explanatory variables for this data set include Type of Wealth of possible values "inherited" or "executive", Sector of possible values "media" or "construction", Citizenship of possible values "Japan" or "France", Characteristic of possible combinations of the values "North", "Founder", "Real Billionaires", Industry Aggregates of possible values "Financial" or "Traded Sectors", and Source of Wealth of possible values "Desigual" or "fast food", all cetegorical variables. There are also quantitative explanatory variables including GDP Currentus with a unit of 1 dollar. 
+
+
+```{r}
+billionaire <- read.csv("the-billionaire-characteristics-database.csv")
+
+```
+

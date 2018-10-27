@@ -41,3 +41,14 @@ billionaire <- read.csv("the-billionaire-characteristics-database.csv")
 
 ```
 
+- name 
+- citizenship
+- county code
+- Net.Worth.Billion
+- Source.of.Wealth 
+- GDP.Currentus
+- Notes
+- Notes.2
+- Generation.of.Inheretence
+- Deflator.1996
+

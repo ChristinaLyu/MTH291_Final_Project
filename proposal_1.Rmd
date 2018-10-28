@@ -82,7 +82,7 @@ gender_n_Selfmade$Political.Connection[is.na(gender_n_Selfmade$Political.Connect
 
 # remove all the na 
 na_billionare <- na.omit(tidy_billionaire)
-# there are only 61 observations when removed all the na from the dataset we removed some columns 
+# there are only 61 observations when removed all the na from the dataset we removed some columns => not a resonable thing to do 
 ```
 
 ```{r}

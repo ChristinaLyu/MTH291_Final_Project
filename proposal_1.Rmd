@@ -189,5 +189,4 @@ ggplot(gender_n_Selfmade, aes(x = Age, y = Net.Worth.Billion, color = Gender)) +
 ```
 
 
-Analysis:
-
+Analysis.. 

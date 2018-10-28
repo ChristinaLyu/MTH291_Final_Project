@@ -163,4 +163,5 @@ mod_age_comp <- lm(Net.Worth.Billion ~ Age + Company.type, gender_n_Selfmade)
 
 summary(mod_age_comp)
 ```
+Analysis:
 

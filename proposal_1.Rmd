@@ -167,11 +167,12 @@ summary(mod_age_comp)
 ```{r,warning=FALSE, message=FALSE}
 
 # Separate by each company type  
-ggplot(gender_n_Selfmade, aes(x = Age, y = Net.Worth.Billion, color = Age)) +
+ggplot(gender_n_Selfmade, aes(x = Age, y = Net.Worth.Billion, color = Gender)) +
   geom_point() + 
   facet_grid(. ~Company.type)
 
 ```
+
 
 Analysis:
 

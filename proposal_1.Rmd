@@ -29,7 +29,7 @@ The population of this study is people who are considered as billionaires accord
 
 # Response Variable:
 
-The response variable is the Real.Net.Worth in billion dollars with unit of 1 billion dollars. 
+The response variable is the Net.Worth.Billion in billion dollars with unit of 1 billion dollars. 
 
 # Explanatory Variables:
 

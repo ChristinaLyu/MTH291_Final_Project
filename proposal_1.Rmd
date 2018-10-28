@@ -49,6 +49,7 @@ We are interested in how the variables above are related to the net worth of the
 library(readr)
 library(dplyr)
 
+# read the csv file 
 billionaire <- read.csv("the-billionaire-characteristics-database.csv")
 
 #tidy up the dataset 
@@ -59,10 +60,13 @@ tidy_billionaire[tidy_billionaire == ""] <- NA
 
 without_na <- na.omit(tidy_billionaire)
 
+# excluded NA for gender
 na_gender <- subset(tidy_billionaire, !is.na(Gender))
 
+# excluded NA for selfmade and exclude NA for gender
 gender_n_Selfmade <- subset(na_gender, !is.na(Selfmade))
 
+# the number of NA in gender 
 sum(is.na(tidy_billionaire$Gender))
 
 

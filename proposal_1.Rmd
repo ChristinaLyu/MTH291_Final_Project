@@ -78,7 +78,13 @@ age_billionare <- gender_n_Selfmade %>%
 
 # change NA in Political.Connections into 0
 gender_n_Selfmade$Political.Connection[is.na(gender_n_Selfmade$Political.Connection)] <- 0
+```
 
+```{r}
+# correlation between variables
+library(mosaic)
+pairs(gender_n_Selfmade)
+cor(gender_n_Selfmade[,unlist(lapply(gender_n_Selfmade, is.numeric))])
 ```
 
 ##### the columns that we deleted 

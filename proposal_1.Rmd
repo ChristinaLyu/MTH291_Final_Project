@@ -29,16 +29,24 @@ The population of this study is people who are considered as billionaires accord
 
 # Response Variable:
 
-The response variable is the net worth in billion dollars with unit of 1 billion dollars. 
+The response variable is the Real.Net.Worth in billion dollars with unit of 1 billion dollars. 
 
 # Explanatory Variables:
 
-The explanatory variables for this data set include Type of Wealth of possible values "inherited" or "executive", Sector of possible values "media" or "construction", Citizenship of possible values "Japan" or "France", Characteristic of possible combinations of the values "North", "Founder", "Real Billionaires", Industry Aggregates of possible values "Financial" or "Traded Sectors", and Source of Wealth of possible values "Desigual" or "fast food", all cetegorical variables. There are also quantitative explanatory variables including GDP Currentus with a unit of 1 dollar. 
+The explanatory variables for this data set include but are not limited to:
+  Type of Wealth: the way the billionaire acquired his or her wealth. The possible values could be "inherited", meaning that the billioniare inherited family assets, or "self made finances", meaning that the billionaire started a new company of finance.
+  Sector: the general industry the billionaire's companies lie in. It is a more generalized grouping of the previous column "Source.of.Wealth" which will not be included in the dataset for analysis because it contains too many different values. Possible values for Sector are "media" or "construction" indicating that the main industry of the billionaire's business is in "media" or "construction".
+  Region: the area where the billionaire is from. It is the continent of the country given in the previous column "Citizenship". The number of countries in the dataset is too large and including all of them will be overwhelming for the visualization. Possible values for region are "Europe" or "South America".
+  Gender: the gender of the billionaire. Possible values are "Male" or "Female".
+  Age: the age of the billionaires in the dataset. It refers to the current age of the billionaire and not the age when he or she first became billionaire. It is a quantitative variable and has values of "41", "83" and others.
+  Above are some of the variables that could have significant relationship with the amount of dollars a billionaire holds. But it is very possible that there are other variables in the dataset that are significant as well.
 
+# Pre-Analysis:
+
+We are interested in how the variables above are related to the net worth of the billionaires. We suspect that there are more males than femeales as billionaires in the dataset, more inherited billionaires than self-made billionaires. We also assume that there are more old people than young and more billionaires in developed countries than developing ones. We would try to justify these assumptions by looking at the distribution of the data points. 
 
 ```{r}
 billionaire <- read.csv("the-billionaire-characteristics-database.csv")
-
 ```
 
 - name 

@@ -78,6 +78,11 @@ age_billionare <- gender_n_Selfmade %>%
 
 # change NA in Political.Connections into 0
 gender_n_Selfmade$Political.Connection[is.na(gender_n_Selfmade$Political.Connection)] <- 0
+
+
+# remove all the na 
+na_billionare <- na.omit(tidy_billionaire)
+# there are only 61 observations when removed all the na from the dataset we removed some columns 
 ```
 
 ```{r}

@@ -1,0 +1,148 @@
+---
+title: "CodeFromProposal1"
+author: "Christina Lyu"
+date: "10/29/2018"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, message=FALSE, warning=FALSE}
+library(readr)
+library(dplyr)
+
+# read the csv file 
+billionaire <- read.csv("the-billionaire-characteristics-database.csv")
+
+#tidy up the dataset 
+tidy_billionaire <- subset(billionaire, select = -c(3, 4, 5, 10, 15, 17, 21, 23, 24, 25))
+
+# change the blank cell into a NA
+tidy_billionaire[tidy_billionaire == ""] <- NA
+
+without_na <- na.omit(tidy_billionaire)
+
+# excluded NA for gender
+na_gender <- subset(tidy_billionaire, !is.na(Gender))
+
+# excluded NA for selfmade and exclude NA for gender
+gender_n_Selfmade <- subset(na_gender, !is.na(Selfmade))
+
+# create a age group (youth, young_adult, adult, senior)
+
+age_billionare <- gender_n_Selfmade %>% 
+  mutate(age_group = ifelse((Age >= -42 & Age <= 18 & Age == 0), 'youth', ifelse((Age > 18 & Age <= 35), 'young_adult', ifelse((Age > 35 & Age <= 55), 'adult', ifelse((Age > 55), 'senior', 'other')))))
+
+
+# change NA in Political.Connections into 0
+gender_n_Selfmade$Political.Connection[is.na(gender_n_Selfmade$Political.Connection)] <- 0
+
+
+# remove all the na 
+na_billionare <- na.omit(tidy_billionaire)
+# there are only 61 observations when removed all the na from the dataset we removed some columns 
+```
+
+```{r}
+# correlation between variables
+library(mosaic)
+pairs(gender_n_Selfmade)
+cor(gender_n_Selfmade[,unlist(lapply(gender_n_Selfmade, is.numeric))])
+```
+
+##### the columns that we deleted 
+
+* name 
+* citizenship
+* county code
+* Source.of.Wealth 
+* GDP.Currentus
+* Notes
+* Notes.2
+* Generation.of.Inheretence
+* Deflator.1996
+* Company
+
+
+```{r,warning=FALSE, message=FALSE}
+library(ggplot2)
+
+# color code by gender and shape by Selfmade or not 
+ggplot(gender_n_Selfmade, aes(x = Age, y = Net.Worth.Billion, color = Gender, shape = Selfmade)) +
+  geom_point()
+
+
+# model of Age, Gender and Selfmade predicting the Net.Worth.Billion
+mod_age_gen_self <- lm(Net.Worth.Billion ~ Age + Gender + Selfmade, gender_n_Selfmade)
+
+summary(mod_age_gen_self)
+```
+
+```{r,warning=FALSE, message=FALSE}
+
+# color code by Industry
+ggplot(gender_n_Selfmade, aes(x = Founding.Date, y = Net.Worth.Billion, color = Industry)) + 
+  geom_point()
+
+
+# model of Founding date and Industry predicting the Net.Worth.Billion
+mod_date_ind <- lm(Net.Worth.Billion ~ Founding.Date + Industry, gender_n_Selfmade)
+
+summary(mod_date_ind)
+
+```
+
+```{r,warning=FALSE, message=FALSE}
+
+# color code by region
+ggplot(gender_n_Selfmade, aes(x = Founding.Date, y = Net.Worth.Billion, color = Region)) + 
+  geom_point()
+
+
+# model of Founding date and region predicting the Net.Worth.Billion
+mod_date_reg <- lm(Net.Worth.Billion ~ Founding.Date + Region, gender_n_Selfmade)
+
+summary(mod_date_reg)
+
+```
+
+```{r,warning=FALSE, message=FALSE}
+
+#color code by political connection
+ggplot(gender_n_Selfmade, aes(x = Founding.Date, y = Net.Worth.Billion, color = factor(Political.Connection))) + 
+  geom_point()
+
+
+# model of Founding date and Political.Connection predicting the Net.Worth.Billion
+
+
+
+mod_date_poli <- lm(Net.Worth.Billion ~ Founding.Date + factor(Political.Connection), gender_n_Selfmade)
+
+summary(mod_date_poli)
+
+```
+
+```{r,warning=FALSE, message=FALSE}
+
+# color code by the type of company 
+ggplot(gender_n_Selfmade, aes(x = Age, y = Net.Worth.Billion, color = Company.type)) +
+  geom_point()
+
+
+# model of Founding date and Industry predicting the Net.Worth.Billion
+mod_age_comp <- lm(Net.Worth.Billion ~ Age + Company.type, gender_n_Selfmade)
+
+summary(mod_age_comp)
+```
+
+```{r,warning=FALSE, message=FALSE}
+
+# Separate by each company type  
+ggplot(gender_n_Selfmade, aes(x = Age, y = Net.Worth.Billion, color = Gender)) +
+  geom_point() + 
+  facet_grid(. ~Company.type)
+
+```

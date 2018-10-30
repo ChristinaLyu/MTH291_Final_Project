@@ -34,20 +34,29 @@ The response variable is the Net.Worth.Billion in billion dollars with unit of 1
 # Explanatory Variables:
 
 The explanatory variables for this data set include but are not limited to:
+
   Type of Wealth: the way the billionaire acquired his or her wealth. The possible values could be "inherited", meaning that the billioniare inherited family assets, or "self made finances", meaning that the billionaire started a new company of finance.
+  
   Sector: the general industry the billionaire's companies lie in. It is a more generalized grouping of the previous column "Source.of.Wealth" which will not be included in the dataset for analysis because it contains too many different values. Possible values for Sector are "media" or "construction" indicating that the main industry of the billionaire's business is in "media" or "construction".
+  
   Region: the area where the billionaire is from. It is the continent of the country given in the previous column "Citizenship". The number of countries in the dataset is too large and including all of them will be overwhelming for the visualization. Possible values for region are "Europe" or "South America".
+  
   Gender: the gender of the billionaire. Possible values are "Male" or "Female".
+  
   Age: the age of the billionaires in the dataset. It refers to the current age of the billionaire and not the age when he or she first became billionaire. It is a quantitative variable and has values of "41", "83" and others.
+  
   Above are some of the variables that could have significant relationship with the amount of dollars a billionaire holds. But it is very possible that there are other variables in the dataset that are significant as well.
 
 # Pre-Analysis:
 
 We are interested in how the variables above are related to the net worth of the billionaires. We suspect that there are more males than femeales as billionaires in the dataset, more inherited billionaires than self-made billionaires. We also assume that there are more old people than young and more billionaires in developed countries than developing ones. We would try to justify these assumptions by looking at the distribution of the data points. 
 
+##### Getting the data and processing
+
 ```{r, message=FALSE, warning=FALSE}
 library(readr)
 library(dplyr)
+library(ggplot2)
 
 # read the csv file 
 billionaire <- read.csv("the-billionaire-characteristics-database.csv")
@@ -66,10 +75,6 @@ na_gender <- subset(tidy_billionaire, !is.na(Gender))
 # excluded NA for selfmade and exclude NA for gender
 gender_n_Selfmade <- subset(na_gender, !is.na(Selfmade))
 
-# the number of NA in gender 
-sum(is.na(tidy_billionaire$Gender))
-
-
 # create a age group (youth, young_adult, adult, senior)
 
 age_billionare <- gender_n_Selfmade %>% 
@@ -85,13 +90,6 @@ na_billionare <- na.omit(tidy_billionaire)
 # there are only 61 observations when removed all the na from the dataset we removed some columns 
 ```
 
-```{r}
-# correlation between variables
-library(mosaic)
-pairs(gender_n_Selfmade)
-cor(gender_n_Selfmade[,unlist(lapply(gender_n_Selfmade, is.numeric))])
-```
-
 ##### the columns that we deleted 
 
 * name 
@@ -105,93 +103,27 @@ cor(gender_n_Selfmade[,unlist(lapply(gender_n_Selfmade, is.numeric))])
 * Deflator.1996
 * Company
 
+We deleted the columns because they either have a lot of NA values which means only partial of the data could be analyzed or they are repeated fields with other columns in the data set. 
+
+Below are some brief examples of our analysis: 
 
 ```{r,warning=FALSE, message=FALSE}
-library(ggplot2)
-
-# color code by gender and shape by Selfmade or not 
-ggplot(gender_n_Selfmade, aes(x = Age, y = Net.Worth.Billion, color = Gender, shape = Selfmade)) +
-  geom_point()
-
-
-# model of Age, Gender and Selfmade predicting the Net.Worth.Billion
-mod_age_gen_self <- lm(Net.Worth.Billion ~ Age + Gender + Selfmade, gender_n_Selfmade)
-
-summary(mod_age_gen_self)
-```
-
-```{r,warning=FALSE, message=FALSE}
-
 # color code by Industry
 ggplot(gender_n_Selfmade, aes(x = Founding.Date, y = Net.Worth.Billion, color = Industry)) + 
   geom_point()
-
-
-# model of Founding date and Industry predicting the Net.Worth.Billion
-mod_date_ind <- lm(Net.Worth.Billion ~ Founding.Date + Industry, gender_n_Selfmade)
-
-summary(mod_date_ind)
-
 ```
-
-```{r,warning=FALSE, message=FALSE}
-
-# color code by region
-ggplot(gender_n_Selfmade, aes(x = Founding.Date, y = Net.Worth.Billion, color = Region)) + 
-  geom_point()
-
-
-# model of Founding date and region predicting the Net.Worth.Billion
-mod_date_reg <- lm(Net.Worth.Billion ~ Founding.Date + Region, gender_n_Selfmade)
-
-summary(mod_date_reg)
-
-```
-
-```{r,warning=FALSE, message=FALSE}
-
-#color code by political connection
-ggplot(gender_n_Selfmade, aes(x = Founding.Date, y = Net.Worth.Billion, color = factor(Political.Connection))) + 
-  geom_point()
-
-
-# model of Founding date and Political.Connection predicting the Net.Worth.Billion
-
-
-
-mod_date_poli <- lm(Net.Worth.Billion ~ Founding.Date + factor(Political.Connection), gender_n_Selfmade)
-
-summary(mod_date_poli)
-
-```
-
-```{r,warning=FALSE, message=FALSE}
-
-# color code by the type of company 
-ggplot(gender_n_Selfmade, aes(x = Age, y = Net.Worth.Billion, color = Company.type)) +
-  geom_point()
-
-
-# model of Founding date and Industry predicting the Net.Worth.Billion
-mod_age_comp <- lm(Net.Worth.Billion ~ Age + Company.type, gender_n_Selfmade)
-
-summary(mod_age_comp)
-```
-
-```{r,warning=FALSE, message=FALSE}
-
-# Separate by each company type  
-ggplot(gender_n_Selfmade, aes(x = Age, y = Net.Worth.Billion, color = Gender)) +
-  geom_point() + 
-  facet_grid(. ~Company.type)
-
-```
-
-Below are some brief examples of our analysis: 
 
 Analysis of graph 1: 
 
 For the scatterplot Net.Worth.Billion vs Founding.Date, we examine how net worth (in billions) was affected by different industries over time. For instance, around the 1600s, majority of the billionaires worked in Real Estate. However, as time passed, we begin to see that most billionaires worked in Consumer industry and Technology-Computer industry. This makes sense as we would expect technological advancement to contribute to the wealth of most billionaires. Furthermore, in the late 1900s, we see that billionaires worked in a diverse industry which also makes since due to technological advancement. For instance, technological advancement allowed the Media Industry to expand.
+
+
+```{r,warning=FALSE, message=FALSE}
+# color code by gender and shape by Selfmade or not 
+ggplot(gender_n_Selfmade, aes(x = Age, y = Net.Worth.Billion, color = Gender, shape = Selfmade)) +
+  geom_point()
+```
+
 
 Analysis of graph 2: 
 

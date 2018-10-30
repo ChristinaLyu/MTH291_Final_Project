@@ -105,7 +105,6 @@ cor(gender_n_Selfmade[,unlist(lapply(gender_n_Selfmade, is.numeric))])
 * Deflator.1996
 * Company
 
-# Analysis
 
 ```{r,warning=FALSE, message=FALSE}
 library(ggplot2)
@@ -188,5 +187,17 @@ ggplot(gender_n_Selfmade, aes(x = Age, y = Net.Worth.Billion, color = Gender)) +
 
 ```
 
+Below are some brief examples of our analysis: 
 
-Analysis.. 
+Analysis of graph 1: 
+
+For the scatterplot Net.Worth.Billion vs Founding.Date, we examine how net worth (in billions) was affected by different industries over time. For instance, around the 1600s, majority of the billionaires worked in Real Estate. However, as time passed, we begin to see that most billionaires worked in Consumer industry and Technology-Computer industry. This makes sense as we would expect technological advancement to contribute to the wealth of most billionaires. Furthermore, in the late 1900s, we see that billionaires worked in a diverse industry which also makes since due to technological advancement. For instance, technological advancement allowed the Media Industry to expand.
+
+Analysis of graph 2: 
+
+For the scatterplot Net.Worth.Billion vs Age, we examine how net worth (in billions) differed among the ages of selfmade male billionaires, selfmade female billionaires, selfmade married couple billionaires, inherited male billionaires, inherited female billionaires, and inherited married couple billionaires. As we expected, most billionaires are male. Furthermore, most billionaires with the highest net worth are selfmade and aged atleast 50.
+
+
+
+
+

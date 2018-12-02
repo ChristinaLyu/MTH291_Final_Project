@@ -1,0 +1,8 @@
+---
+title: "final project"
+author: "Aoi, Christina, Ahlam"
+date: "12/2/2018"
+output: html_document
+---
+
+### Introduction : 

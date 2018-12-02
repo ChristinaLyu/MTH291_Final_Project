@@ -146,3 +146,46 @@ ggplot(gender_n_Selfmade, aes(x = Age, y = Net.Worth.Billion, color = Gender)) +
   facet_grid(. ~Company.type)
 
 ```
+
+
+```{r}
+gender_n_Selfmade[complete.cases(gender_n_Selfmade), ]
+```
+
+```{r}
+
+a <- aov(Net.Worth.Billion ~ Type.of.Wealth, data = gender_n_Selfmade)
+summary(a)
+# color code by the type of company 
+ggplot(gender_n_Selfmade, aes(x = Founding.Date, y = Net.Worth.Billion, color = Type.of.Wealth)) +
+  geom_point()
+lm <- lm(log10(Net.Worth.Billion) ~ Type.of.Wealth, data = gender_n_Selfmade)
+summary(lm)
+plot(lm)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -13,11 +13,15 @@ knitr::opts_chunk$set(echo = TRUE)
 library(readr)
 library(dplyr)
 
+library(readr)
+library(dplyr)
+library(ggplot2)
+
 # read the csv file 
 billionaire <- read.csv("the-billionaire-characteristics-database.csv")
 
 #tidy up the dataset 
-tidy_billionaire <- subset(billionaire, select = -c(3, 4, 5, 10, 15, 17, 21, 23, 24, 25))
+tidy_billionaire <- subset(billionaire, select = -c(3, 4, 5, 10, 15, 17, 21, 23, 24, 25,26))
 
 # change the blank cell into a NA
 tidy_billionaire[tidy_billionaire == ""] <- NA
@@ -30,19 +34,27 @@ na_gender <- subset(tidy_billionaire, !is.na(Gender))
 # excluded NA for selfmade and exclude NA for gender
 gender_n_Selfmade <- subset(na_gender, !is.na(Selfmade))
 
-# create a age group (youth, young_adult, adult, senior)
+# change NA in Political.Connections into 0
+gender_n_Selfmade$Political.Connection[is.na(gender_n_Selfmade$Political.Connection)] <- 0
 
+# create a age group (youth, young_adult, adult, senior)
 age_billionare <- gender_n_Selfmade %>% 
   mutate(age_group = ifelse((Age >= -42 & Age <= 18 & Age == 0), 'youth', ifelse((Age > 18 & Age <= 35), 'young_adult', ifelse((Age > 35 & Age <= 55), 'adult', ifelse((Age > 55), 'senior', 'other')))))
 
+# removing age_group NA valuables
+age_group_na <- subset(age_billionare, !is.na(age_group))
 
-# change NA in Political.Connections into 0
-gender_n_Selfmade$Political.Connection[is.na(gender_n_Selfmade$Political.Connection)] <- 0
+#removing founding year NA variables
+founding_year_na <- subset(age_group_na, !is.na(Founding.Date))
+
+#age of company 
+final_data <- founding_year_na %>%
+  mutate(company_age = 2016 - Founding.Date)
 
 
 # remove all the na 
 na_billionare <- na.omit(tidy_billionaire)
-# there are only 61 observations when removed all the na from the dataset we removed some columns 
+# there are only 61 observations when removed all the na from the dataset we removed some columns => not a resonable thing to do
 ```
 
 ```{r}

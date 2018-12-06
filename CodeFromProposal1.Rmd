@@ -176,6 +176,18 @@ summary(lm)
 plot(lm)
 ```
 
+```{r}
+
+names(final_data) <-c("Year", "Rank", "Net_Worth_Billion", "Age", "Industry_Aggregates", "Selfmade", "Type_of_Wealth", "Industry", "Relationship_to_Company", "Gender", "Sector", "Company_type", "Founding_Date", "Political_Connection", "Region", "Characteristics", "age_group", "company_age")
+```
+
+```{r}
+require(leaps)
+
+stepwise <- regsubsets(Net_Worth_Billion ~ Year + Rank + Industry_Aggregates + Selfmade + Type_of_Wealth + Industry + Relationship_to_Company + Gender + Sector + Company_type + Founding_Date + Political_Connection + Region + Characteristics + age_group + company_age, data = final_data, nbest = 1, really.big = TRUE, method = "seqrep")
+
+with(summary(stepwise), data.frame(rsq, adjr2, cp, rss, bic, outmat))
+```
 
 
 

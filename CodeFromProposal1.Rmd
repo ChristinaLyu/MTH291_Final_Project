@@ -100,7 +100,7 @@ ggplot(gender_n_Selfmade2, aes(x = Founding.Date, y = Net.Worth.Billion, color =
 
 
 # model of Founding date and Industry predicting the Net.Worth.Billion
-mod_date_ind <- lm(Net.Worth.Billion ~ Founding.Date + Industry, gender_n_Selfmade)
+mod_date_ind <- lm(Net.Worth.Billion ~ Founding.Date + Industry, gender_n_Selfmade2)
 
 summary(mod_date_ind)
 
@@ -190,8 +190,13 @@ with(summary(stepwise), data.frame(rsq, adjr2, cp, rss, bic, outmat))
 ```
 
 ```{r}
+final_data[final_data$Sector == "Communications", ]
+```
+
+
+```{r}
 final_data <- final_data %>%
-  mutate(SectorCommunications = ifelse(Sector == "communications", 1, 0)) %>%
+  mutate(SectorCommunications = ifelse(Sector == "Communications", 1, 0)) %>%
   mutate(SectorFashion = ifelse(Sector == "fashion", 1, 0)) %>%
   mutate(SectorTechnology = ifelse(Sector == "technology", 1, 0)) %>%
   mutate(SectorFinance = ifelse(Sector == "finance", 1, 0)) %>%
@@ -208,6 +213,7 @@ summary(m)
 ```{r}
 mod_age <- lm( Net_Worth_Billion ~ Age, final_data) 
 plot(mod_age, which = 4)
+plot(m, which = 4)
 ```
 
 

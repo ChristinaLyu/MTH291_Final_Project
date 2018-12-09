@@ -205,6 +205,10 @@ m <- lm(Net_Worth_Billion ~ Year + Rank + SectorCommunications + SectorFashion +
 summary(m)
 ```
 
+```{r}
+mod_age <- lm( Net_Worth_Billion ~ Age) 
+plot(mod_age, which = 4)
+```
 
 
 

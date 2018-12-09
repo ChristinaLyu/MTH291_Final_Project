@@ -189,6 +189,21 @@ stepwise <- regsubsets(Net_Worth_Billion ~ Year + Rank + Industry_Aggregates + S
 with(summary(stepwise), data.frame(rsq, adjr2, cp, rss, bic, outmat))
 ```
 
+```{r}
+final_data <- final_data %>%
+  mutate(SectorCommunications = ifelse(Sector == "communications", 1, 0)) %>%
+  mutate(SectorFashion = ifelse(Sector == "fashion", 1, 0)) %>%
+  mutate(SectorTechnology = ifelse(Sector == "technology", 1, 0)) %>%
+  mutate(SectorFinance = ifelse(Sector == "finance", 1, 0)) %>%
+  mutate(SectorSoftware = ifelse(Sector == "software", 1, 0)) %>%
+  mutate(Company_typeacquired = ifelse(Company_type == "acquired", 1, 0))
+```
+
+
+```{r}
+m <- lm(Net_Worth_Billion ~ Year + Rank + SectorCommunications + SectorFashion + SectorFinance + SectorSoftware + SectorTechnology + Company_typeacquired, data = final_data)
+summary(m)
+```
 
 
 

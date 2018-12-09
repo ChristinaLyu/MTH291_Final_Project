@@ -93,7 +93,7 @@ summary(mod_age_gen_self)
 ```
 
 ```{r,warning=FALSE, message=FALSE}
-gender_n_Selfmade2 <- gender_n_Selfmade[gender_n_Selfmade$Variable1!="0.0", ]
+gender_n_Selfmade2 <- gender_n_Selfmade[gender_n_Selfmade$Industry!="0.0", ]
 # color code by Industry
 ggplot(gender_n_Selfmade2, aes(x = Founding.Date, y = Net.Worth.Billion, color = Industry)) + 
   geom_point()

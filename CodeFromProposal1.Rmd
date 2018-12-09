@@ -60,7 +60,7 @@ na_billionare <- na.omit(tidy_billionaire)
 ```{r}
 # correlation between variables
 library(mosaic)
-pairs(gender_n_Selfmade)
+# pairs(gender_n_Selfmade)
 cor(gender_n_Selfmade[,unlist(lapply(gender_n_Selfmade, is.numeric))])
 ```
 
@@ -94,9 +94,12 @@ summary(mod_age_gen_self)
 
 ```{r,warning=FALSE, message=FALSE}
 gender_n_Selfmade2 <- gender_n_Selfmade[gender_n_Selfmade$Industry!="0.0", ]
+
 # color code by Industry
 ggplot(gender_n_Selfmade2, aes(x = Founding.Date, y = Net.Worth.Billion, color = Industry)) + 
   geom_point()
+
+ggplot(gender_n_Selfmade2, aes(x = Industry, y = Net.Worth.Billion)) + geom_point()
 
 
 # model of Founding date and Industry predicting the Net.Worth.Billion
@@ -212,6 +215,7 @@ summary(m)
 
 ```{r}
 mod_age <- lm( Net_Worth_Billion ~ Age, final_data) 
+plot(mod_age)
 plot(mod_age, which = 4)
 plot(m, which = 4)
 ```

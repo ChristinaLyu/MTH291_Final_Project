@@ -256,6 +256,11 @@ median(Subsaharan_Africa$Age)
 
 
 
+```{r}
+m2 <- lm(log(Net_Worth_Billion) ~ Year + Rank + SectorCommunications + SectorFashion + SectorFinance + SectorSoftware + SectorTechnology + Company_typeacquired, data = final_data)
+summary(m2)
+plot(m2)
+```
 
 
 

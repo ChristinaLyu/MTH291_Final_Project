@@ -206,7 +206,7 @@ summary(m)
 ```
 
 ```{r}
-mod_age <- lm( Net_Worth_Billion ~ Age) 
+mod_age <- lm( Net_Worth_Billion ~ Age, final_data) 
 plot(mod_age, which = 4)
 ```
 

@@ -187,7 +187,7 @@ names(final_data) <-c("Year", "Rank", "Net_Worth_Billion", "Age", "Industry_Aggr
 ```{r}
 require(leaps)
 
-stepwise <- regsubsets(Net_Worth_Billion ~ Year + Rank + Industry_Aggregates + Selfmade + Type_of_Wealth + Industry + Relationship_to_Company + Gender + Sector + Company_type + Founding_Date + Political_Connection + Region + Characteristics + age_group + company_age, data = final_data, nbest = 1, really.big = TRUE, method = "seqrep")
+stepwise <- regsubsets(Net_Worth_Billion ~ Year + Rank + Industry_Aggregates + Selfmade + Type_of_Wealth + Industry + Relationship_to_Company + Gender + Sector + Company_type + Founding_Date + Political_Connection + Region + Characteristics + age_group + company_age, data = final_data, nbest = 1, nvmax = 24, really.big = TRUE, method = "seqrep")
 
 with(summary(stepwise), data.frame(rsq, adjr2, cp, rss, bic, outmat))
 ```
@@ -204,12 +204,13 @@ final_data <- final_data %>%
   mutate(SectorTechnology = ifelse(Sector == "technology", 1, 0)) %>%
   mutate(SectorFinance = ifelse(Sector == "finance", 1, 0)) %>%
   mutate(SectorSoftware = ifelse(Sector == "software", 1, 0)) %>%
-  mutate(Company_typeacquired = ifelse(Company_type == "acquired", 1, 0))
+  mutate(Company_typeacquired = ifelse(Company_type == "acquired", 1, 0)) %>%
+  mutate(SectorOilRefining = ifelse(Sector == "oil refining", 1, 0))
 ```
 
 
 ```{r}
-m <- lm(Net_Worth_Billion ~ Year + Rank + SectorCommunications + SectorFashion + SectorFinance + SectorSoftware + SectorTechnology + Company_typeacquired, data = final_data)
+m <- lm(Net_Worth_Billion ~ Year + Rank + SectorCommunications + SectorFashion + SectorFinance + SectorSoftware + SectorTechnology + Company_typeacquired + SectorOilRefining, data = final_data)
 summary(m)
 ```
 

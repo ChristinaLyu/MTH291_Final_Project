@@ -289,6 +289,10 @@ cor(Net_Worth_Billion ~ shuffle(Year + Rank + SectorCommunications + SectorFashi
 rand.test1 <- do(5000) * cor(Net_Worth_Billion ~ shuffle(Year + Rank + SectorCommunications + SectorFashion + SectorFinance + SectorSoftware + SectorTechnology + Company_typeacquired), data = NA_final_data)
 
 densityplot(~cor, data=rand.test1)
+
+summary(rand.test1)
+
+
 ```
 
 

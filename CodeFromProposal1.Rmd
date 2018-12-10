@@ -275,6 +275,7 @@ set.seed(12345)
 ```
 
 ```{r}
+
 # omit NA values
 NA_final_data <- na.omit(final_data)
 
@@ -301,6 +302,11 @@ densityplot(~cor, data=rand.test1)
 ```
 
 
+$$
+
+\ Net\_Worth\_Billion = \beta_0 + \beta_1 \cdot \ Year \beta_2 \cdot \ Rank + \beta_3 \cdot	\ SectorCommunications + \beta_4 \cdot \SectorFashion + \beta_5 \cdot \SectorFinance + \beta_6 \cdot \SectorSoftware \beta_7 \cdot	\SectorTechnology \beta_8 \cdot \Company_typeacquired
+
+$$
 
 
 

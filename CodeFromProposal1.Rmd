@@ -257,6 +257,7 @@ median(Subsaharan_Africa$Age)
 
 
 ```{r}
+#transformed Net_Worth_Billion
 m2 <- lm(log(Net_Worth_Billion) ~ Year + Rank + SectorCommunications + SectorFashion + SectorFinance + SectorSoftware + SectorTechnology + Company_typeacquired, data = final_data)
 summary(m2)
 plot(m2)
@@ -266,9 +267,33 @@ plot(m2)
 
 
 
+```{r}
+require(mosaic)
+require(Stat2Data)
+require(dplyr)
+set.seed(12345)
+```
+
+```{r}
+#randomization
+cor(Net_Worth_Billion ~ Year + Rank + SectorCommunications + SectorFashion + SectorFinance + SectorSoftware + SectorTechnology + Company_typeacquired, data = final_data)
+
+cor(Net_Worth_Billion ~ shuffle(Year + Rank + SectorCommunications + SectorFashion + SectorFinance + SectorSoftware + SectorTechnology + Company_typeacquired), data = final_data)
+
+rand.test1 <- do(5000) * cor(Net_Worth_Billion ~ shuffle(Year + Rank + SectorCommunications + SectorFashion + SectorFinance + SectorSoftware + SectorTechnology + Company_typeacquired), data = final_data)
+
+densityplot(~cor, data=rand.test1)
+```
 
 
 
+```{r}
+#bootstrap
+bootstrap <- do(5000) * coef(lm(Net_Worth_Billion ~ Year + Rank + SectorCommunications + SectorFashion + SectorFinance + SectorSoftware + SectorTechnology + Company_typeacquired, data = final_data))
+densityplot(~Intercept, data = final_data)
+summary(bootstrap)
+bootstrap %>% summarize(ds = sd(Net_Worth_Billion))
+```
 
 
 

@@ -276,27 +276,42 @@ set.seed(12345)
 ```
 
 ```{r}
+
+# omit NA values
+NA_final_data <- na.omit(final_data)
+
+# coefficients of the original data 
+cor(Net_Worth_Billion ~ Year + Rank + SectorCommunications + SectorFashion + SectorFinance + SectorSoftware + SectorTechnology + Company_typeacquired, data = NA_final_data)
+
+# point estimate??
+cor(Net_Worth_Billion ~ shuffle(Year + Rank + SectorCommunications + SectorFashion + SectorFinance + SectorSoftware + SectorTechnology + Company_typeacquired), data = NA_final_data)
+
 #randomization
-cor(Net_Worth_Billion ~ Year + Rank + SectorCommunications + SectorFashion + SectorFinance + SectorSoftware + SectorTechnology + Company_typeacquired, data = final_data)
-
-cor(Net_Worth_Billion ~ shuffle(Year + Rank + SectorCommunications + SectorFashion + SectorFinance + SectorSoftware + SectorTechnology + Company_typeacquired), data = final_data)
-
-rand.test1 <- do(5000) * cor(Net_Worth_Billion ~ shuffle(Year + Rank + SectorCommunications + SectorFashion + SectorFinance + SectorSoftware + SectorTechnology + Company_typeacquired), data = final_data)
+rand.test1 <- do(5000) * cor(Net_Worth_Billion ~ shuffle(Year + Rank + SectorCommunications + SectorFashion + SectorFinance + SectorSoftware + SectorTechnology + Company_typeacquired), data = NA_final_data)
 
 densityplot(~cor, data=rand.test1)
+
+summary(rand.test1)
+
+
 ```
 
 
 
 ```{r}
 #bootstrap
-bootstrap <- do(5000) * coef(lm(Net_Worth_Billion ~ Year + Rank + SectorCommunications + SectorFashion + SectorFinance + SectorSoftware + SectorTechnology + Company_typeacquired, data = final_data))
-densityplot(~Intercept, data = final_data)
-summary(bootstrap)
-bootstrap %>% summarize(ds = sd(Net_Worth_Billion))
+#bootstrap <- do(5000) * coef(lm(Net_Worth_Billion ~ Year + Rank + SectorCommunications + SectorFashion + SectorFinance + SectorSoftware + SectorTechnology + Company_typeacquired, data = final_data))
+#densityplot( ~ Intercept, data = bootstrap)
+#summary(bootstrap)
+#bootstrap %>% summarize(ds = sd(final_data$Net_Worth_Billion))
 ```
 
 
+$$
+
+\ Net\_Worth\_Billion = \beta_0 + \beta_1 \cdot \ Year \beta_2 \cdot \ Rank + \beta_3 \cdot	\ SectorCommunications + \beta_4 \cdot \SectorFashion + \beta_5 \cdot \SectorFinance + \beta_6 \cdot \SectorSoftware \beta_7 \cdot	\SectorTechnology \beta_8 \cdot \Company_typeacquired
+
+$$
 
 
 

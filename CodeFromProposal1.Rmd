@@ -185,7 +185,7 @@ names(final_data) <-c("Year", "Rank", "Net_Worth_Billion", "Age", "Industry_Aggr
 ```
 
 ```{r}
-require(leaps)
+library(leaps)
 
 stepwise <- regsubsets(Net_Worth_Billion ~ Year + Rank + Industry_Aggregates + Selfmade + Type_of_Wealth + Industry + Relationship_to_Company + Gender + Sector + Company_type + Founding_Date + Political_Connection + Region + Characteristics + age_group + company_age, data = final_data, nbest = 1, nvmax = 24, really.big = TRUE, method = "seqrep")
 
@@ -198,7 +198,7 @@ final_data[final_data$Sector == "Communications", ]
 
 
 ```{r}
-final_data <- final_data %>%
+final_data_1 <- final_data %>%
   mutate(SectorCommunications = ifelse(Sector == "Communications", 1, 0)) %>%
   mutate(SectorFashion = ifelse(Sector == "fashion", 1, 0)) %>%
   mutate(SectorTechnology = ifelse(Sector == "technology", 1, 0)) %>%
@@ -210,12 +210,12 @@ final_data <- final_data %>%
 
 
 ```{r}
-m <- lm(Net_Worth_Billion ~ Year + Rank + SectorCommunications + SectorFashion + SectorFinance + SectorSoftware + SectorTechnology + Company_typeacquired + SectorOilRefining, data = final_data)
+m <- lm(Net_Worth_Billion ~ Year + Rank + SectorCommunications + SectorFashion + SectorFinance + SectorSoftware + SectorTechnology + Company_typeacquired + SectorOilRefining, data = final_data_1)
 summary(m)
 ```
 
 ```{r}
-mod_age <- lm( Net_Worth_Billion ~ Age, final_data) 
+mod_age <- lm( Net_Worth_Billion ~ Age, final_data_1) 
 plot(mod_age)
 plot(mod_age, which = 4)
 plot(m, which = 4)
@@ -225,7 +225,7 @@ plot(m, which = 4)
 ```{r}
 
 #billionare age dividing by region
-ggplot(final_data, aes(x = Age, y = Net_Worth_Billion)) + geom_point() + facet_grid(. ~Region) + geom_smooth(method = 'lm', se = FALSE)
+ggplot(final_data_1, aes(x = Age, y = Net_Worth_Billion)) + geom_point() + facet_grid(. ~Region) + geom_smooth(method = 'lm', se = FALSE)
 
 ```
 
@@ -259,7 +259,7 @@ median(Subsaharan_Africa$Age)
 
 ```{r}
 #transformed Net_Worth_Billion
-m2 <- lm(log(Net_Worth_Billion) ~ Year + Rank + SectorCommunications + SectorFashion + SectorFinance + SectorSoftware + SectorTechnology + Company_typeacquired, data = final_data)
+m2 <- lm(log(Net_Worth_Billion) ~ Year + Rank + SectorCommunications + SectorFashion + SectorFinance + SectorSoftware + SectorTechnology + Company_typeacquired, data = final_data_1)
 summary(m2)
 plot(m2)
 ```
@@ -278,7 +278,7 @@ set.seed(12345)
 ```{r}
 
 # omit NA values
-NA_final_data <- na.omit(final_data)
+NA_final_data <- na.omit(final_data_1)
 
 # coefficients of the original data 
 cor(Net_Worth_Billion ~ Year + Rank + SectorCommunications + SectorFashion + SectorFinance + SectorSoftware + SectorTechnology + Company_typeacquired, data = NA_final_data)
@@ -312,10 +312,156 @@ $$
 \ Net\_Worth\_Billion = \beta_0 + \beta_1 \cdot \ Year \beta_2 \cdot \ Rank + \beta_3 \cdot	\ SectorCommunications + \beta_4 \cdot \SectorFashion + \beta_5 \cdot \SectorFinance + \beta_6 \cdot \SectorSoftware \beta_7 \cdot	\SectorTechnology \beta_8 \cdot \Company_typeacquired \beta_8 \cdot \ SectorOilRefining
 
 $$
+--------------------------------------------------------------------------------------------------------------
+creating another model
+
+```{r}
+
+# without rank and year
+new_stepwise <- regsubsets(Net_Worth_Billion ~ Industry_Aggregates + Selfmade + Type_of_Wealth + Industry + Relationship_to_Company + Gender + Sector + Company_type + Founding_Date + Political_Connection + Region + Characteristics + age_group + company_age, data = final_data, nbest = 1, nvmax = 24, really.big = TRUE, method = "seqrep")
+
+with(summary(new_stepwise), data.frame(rsq, adjr2, cp, rss, bic, outmat))
+```
 
 
+```{r}
+#create new data frame for doing anova
+new_final_data <- final_data %>%
+  mutate(Communications = ifelse(Sector == "Communications", 1, 0)) %>%
+  mutate(Fashion = ifelse(Sector == "fashion", 1, 0)) %>%
+  mutate(Technology = ifelse(Sector == "technology", 1, 0)) %>%
+  mutate(Finance = ifelse(Sector == "finance", 1, 0)) %>%
+  mutate(Software = ifelse(Sector == "software", 1, 0)) %>%
+  mutate(Acquired = ifelse(Company_type == "acquired", 1, 0)) %>%
+  mutate(Oil_refining = ifelse(Sector == "oil refining", 1, 0)) %>%
+  mutate(Chairman = ifelse(Relationship_to_Company == "chairman", 1, 0)) %>% 
+  mutate(Construction_real_estate_banking = ifelse(Sector == "construction/real estate/banking", 1, 0)) %>%
+  mutate(age_senior = ifelse(age_group == "senior", 1, 0))
 
+new_final_data %>% na.omit(new_final_data)
 
+# each model which the new_stepwise chose 
+mod_1 <-lm(Net_Worth_Billion ~ Software, new_final_data)
+
+mod_2 <-lm(Net_Worth_Billion ~ Communications + Software, new_final_data)
+
+mod_3 <-lm(Net_Worth_Billion ~ Communications + Fashion + Software, new_final_data)
+
+mod_4 <-lm(Net_Worth_Billion ~ Communications + Fashion + Software + Acquired, new_final_data)
+
+mod_5 <-lm(Net_Worth_Billion ~ Communications + Fashion + Software + Technology + Acquired, new_final_data)
+
+mod_6 <-lm(Net_Worth_Billion ~ Communications + Fashion + Finance + Software + Technology + Acquired, new_final_data)
+
+mod_7 <-lm(Net_Worth_Billion ~ Communications + Fashion + Finance + Oil_refining + Software + Technology + Acquired, new_final_data)
+
+mod_8 <-lm(Net_Worth_Billion ~ Chairman + Communications + Fashion + Finance + Oil_refining + Software + Technology + Acquired, new_final_data)
+
+mod_9 <-lm(Net_Worth_Billion ~ Chairman + Communications + Construction_real_estate_banking + Fashion + Finance + Oil_refining + Software + Technology + Acquired, new_final_data)
+
+mod_10 <- lm(Net_Worth_Billion ~ Chairman + Communications + Construction_real_estate_banking + Fashion + Finance + Oil_refining + Software + Technology + Acquired + age_senior, new_final_data)
+
+anova(mod_1, mod_2, mod_3)
+anova(mod_5, mod_6, mod_7, mod_8, mod_9, mod_10)
+
+summary(mod_4)
+
+summary(mod_1)
+
+#significant 
+summary(mod_2)
+
+summary(mod_3)
+summary(mod_4)
+
+summary(mod_5)
+
+summary(mod_6)
+
+summary(mod_7)
+
+#significant the best I guess from looking at the summary and anova 
+summary(mod_9) 
+
+#significant
+summary(mod_10)
+```
+
+```{r}
+library(car)
+
+vif(mod_9)
+
+# VIF is low so no multicolinearity 
+```
+
+-----------------------------------------------------------------------------------------------------------------------
+looking at bilinares on 2014 (present, recent?)
+
+```{r}
+# select just 2014 data
+data_2014 <- filter(final_data, Year == "2014")
+
+# not including year and rank
+stepwise_2016 <- regsubsets(Net_Worth_Billion ~ Industry_Aggregates + Selfmade + Type_of_Wealth + Industry + Relationship_to_Company + Gender + Sector + Company_type + Founding_Date + Political_Connection + Region + Characteristics + age_group + company_age, data = final_data, nbest = 1, really.big = TRUE, method = "seqrep")
+
+with(summary(stepwise_2016), data.frame(rsq, adjr2, cp, rss, bic, outmat))
+
+```
+
+```{r}
+new_2014_data <- data_2014 %>%
+  mutate(Communications = ifelse(Sector == "Communications", 1, 0)) %>%
+  mutate(Fashion = ifelse(Sector == "fashion", 1, 0)) %>%
+  mutate(Technology = ifelse(Sector == "technology", 1, 0)) %>%
+  mutate(Finance = ifelse(Sector == "finance", 1, 0)) %>%
+  mutate(Software = ifelse(Sector == "software", 1, 0)) %>%
+  mutate(Acquired = ifelse(Company_type == "acquired", 1, 0)) %>%
+  mutate(Oil_refining = ifelse(Sector == "oil refining", 1, 0)) %>%
+  mutate(Chairman = ifelse(Relationship_to_Company == "chairman", 1, 0)) %>% 
+  mutate(Construction_real_estate_banking = ifelse(Sector == "construction/real estate/banking", 1, 0)) 
+
+new_2014_data %>% na.exclude(new_2014_data)
+
+present_1 <-lm( Net_Worth_Billion ~ Software, new_2014_data)
+  
+present_2 <-lm( Net_Worth_Billion ~ Communications + Software, new_2014_data)
+  
+present_3 <-lm( Net_Worth_Billion ~ Communications + Fashion + Software, new_2014_data)
+  
+present_4 <-lm( Net_Worth_Billion ~ Communications + Fashion + Software + Acquired, new_2014_data)
+
+present_5 <-lm( Net_Worth_Billion ~ Communications + Fashion + Software + Technology + Acquired, new_2014_data)
+
+present_6 <-lm(Net_Worth_Billion ~ Communications + Fashion + Finance + Software + Technology + Acquired, new_2014_data)
+
+present_7 <-lm(Net_Worth_Billion ~ Communications + Fashion + Finance + Oil_refining + Software + Technology + Acquired, new_2014_data)
+
+present_8 <-lm(Net_Worth_Billion ~ Chairman + Communications + Fashion + Finance + Oil_refining + Software + Technology + Acquired, new_2014_data)
+
+present_9 <- lm(Net_Worth_Billion ~ Chairman + Communications + Construction_real_estate_banking + Fashion + Finance + Oil_refining + Software + Technology + Acquired, new_2014_data)
+
+anova(present_1, present_2, present_3) 
+anova(present_4, present_5, present_6, present_7, present_8, present_9)
+
+summary(present_2)
+
+summary(present_5)
+
+summary(present_9)
+
+# not sure which model is significant 
+```
+
+```{r}
+# looking at billionares in 2014
+# color by sector 
+ggplot(new_2014_data, aes(x = age_group, y = Net_Worth_Billion, color = Sector)) + geom_point()
+
+# Looking at region
+new_2014_data$age_group <- factor(new_2014_data$age_group, levels = c("young_adult", "adult", "senior"))
+ggplot(new_2014_data, aes(x = age_group, y = Net_Worth_Billion, color = Region)) + geom_point()
+```
 
 
 

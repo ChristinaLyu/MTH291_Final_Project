@@ -1,13 +1,41 @@
 ---
-title: "CodeFromProposal1"
-author: "Christina Lyu"
-date: "10/29/2018"
-output: pdf_document
+title: "Final Report"
+author: "Aoi Ogawa, Ahlam El Mernissi, Christina Lyu"
+date: "12/12/2018"
+output:
+  pdf_document: 
+    latex_engine: xelatex
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
+### Introduction: 
+
+	Everyone has a billionaire dream. Having money means living in mansions, flying private planes, attending parties and meeting celebrities. It is very unlikely to know a billionaire personally, but we can learn about their life stories from books and interviews. They might not be true, but they gives us some characters to look up to in case someday we might also become billionaires. We assume that billionaires share similar characteristics, which are not possessed by the general public and are essential to the outcome of becoming billionaires. Therefore, we want to investigate the shared characteristics of billionaires.
+	
+### Data:
+
+  The data we found is called “The Billionaire Characteristics Database” from the website OpenDataSoft. It examines the billionaires listed on Forbes for 20 years and collect information about them and their companies according to the magazine Rich People Poor Countries.
+  
+  The observations in the dataset are each billionaire and the columns contain information about themselves and their companies, including age, gender, the industry their business mainly dwell in and many more. To explore the relationship between billionaires and the common characteristics, we use their net worth Net.Worth.Billion as the response variable and the others as predictors. One predictor is Rank, which is the rank of the billionaires in Forbes. As they are ranked based on their net worth, Rank is clearly strongly related to Net.Worth.Billion, but it is not a very informative predictor to interpret the common characteristics of the billionaires. 
+  
+  The cleansing process of the data includes excluding rows with N.A and 0 values, creating additional binary predictors based on existing ones and fit models according to the new variables. 
+  
+  
+### Methods:
+
+### Statistics:
+
+### Results:
+
+### Conclusions:
+
+### Reference:
+
+1. “The Billionaire Characteristics Database.” OpenDataSoft -, `data.opendatasoft.com/explore/dataset/the-billionaire-characteristics-database@public-us/table/`.
+
 
 ```{r, message=FALSE, warning=FALSE}
 library(readr)
@@ -63,19 +91,6 @@ library(mosaic)
 # pairs(gender_n_Selfmade)
 cor(gender_n_Selfmade[,unlist(lapply(gender_n_Selfmade, is.numeric))])
 ```
-
-##### the columns that we deleted 
-
-* name 
-* citizenship
-* county code
-* Source.of.Wealth 
-* GDP.Currentus
-* Notes
-* Notes.2
-* Generation.of.Inheretence
-* Deflator.1996
-* Company
 
 
 ```{r,warning=FALSE, message=FALSE}

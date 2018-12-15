@@ -18,8 +18,8 @@ library(car)
 ```
 
 ### Abstract:
-
-
+Theabstractshould be a 4-8 sentence paragraph that clearly (but concisely) describes your main research questions, the type of data you have, and your primary findings. 
+  Our research question is "What are some common characteristics for billioniares?". Our assumption is that most billionaires' wealth is inherited and they are mainly male. The data we use has a quantative response variable and several categorical predictors. The test statistics show that billionaires with business in the fields including Communications, Technology tend to have a significant higher net worth than others. It has also been found that the two variables Year and Rank explain the most variance in the net worth of billionaires. 
 
 ### Introduction: 
 

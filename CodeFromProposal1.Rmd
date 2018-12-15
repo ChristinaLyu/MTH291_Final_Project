@@ -9,7 +9,17 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(mosaic)
+library(leaps)
+library(car)
 ```
+
+### Abstract:
+
+
 
 ### Introduction: 
 
@@ -26,25 +36,7 @@ knitr::opts_chunk$set(echo = TRUE)
   
 ### Methods:
 
-### Statistics:
-
-### Results:
-
-### Conclusions:
-
-### Reference:
-
-1. “The Billionaire Characteristics Database.” OpenDataSoft -, `data.opendatasoft.com/explore/dataset/the-billionaire-characteristics-database@public-us/table/`.
-
-
 ```{r, message=FALSE, warning=FALSE}
-library(readr)
-library(dplyr)
-
-library(readr)
-library(dplyr)
-library(ggplot2)
-
 # read the csv file 
 billionaire <- read.csv("the-billionaire-characteristics-database.csv")
 
@@ -87,15 +79,13 @@ na_billionare <- na.omit(tidy_billionaire)
 
 ```{r}
 # correlation between variables
-library(mosaic)
+
 # pairs(gender_n_Selfmade)
 cor(gender_n_Selfmade[,unlist(lapply(gender_n_Selfmade, is.numeric))])
 ```
 
 
 ```{r,warning=FALSE, message=FALSE}
-library(ggplot2)
-
 # color code by gender and shape by Selfmade or not 
 ggplot(gender_n_Selfmade, aes(x = Age, y = Net.Worth.Billion, color = Gender, shape = Selfmade)) +
   geom_point()
@@ -200,9 +190,8 @@ names(final_data) <-c("Year", "Rank", "Net_Worth_Billion", "Age", "Industry_Aggr
 ```
 
 ```{r}
-library(leaps)
-
-stepwise <- regsubsets(Net_Worth_Billion ~ Year + Rank + Industry_Aggregates + Selfmade + Type_of_Wealth + Industry + Relationship_to_Company + Gender + Sector + Company_type + Founding_Date + Political_Connection + Region + Characteristics + age_group + company_age, data = final_data, nbest = 1, nvmax = 24, really.big = TRUE, method = "seqrep")
+# construct stepwise selection to get significant variables
+stepwise <- regsubsets(Net_Worth_Billion ~ Year + Rank + Industry_Aggregates + Selfmade + Type_of_Wealth + Industry + Relationship_to_Company + Gender + Sector + Company_type + Founding_Date + Political_Connection + Region + Characteristics + age_group + company_age, data = final_data, nbest = 1, really.big = TRUE, method = "seqrep")
 
 with(summary(stepwise), data.frame(rsq, adjr2, cp, rss, bic, outmat))
 ```
@@ -403,10 +392,7 @@ summary(mod_10)
 ```
 
 ```{r}
-library(car)
-
 vif(mod_9)
-
 # VIF is low so no multicolinearity 
 ```
 
@@ -478,5 +464,13 @@ new_2014_data$age_group <- factor(new_2014_data$age_group, levels = c("young_adu
 ggplot(new_2014_data, aes(x = age_group, y = Net_Worth_Billion, color = Region)) + geom_point()
 ```
 
+### Statistics:
 
+### Results:
+
+### Conclusions:
+
+### Reference:
+
+1. “The Billionaire Characteristics Database.” OpenDataSoft -, `data.opendatasoft.com/explore/dataset/the-billionaire-characteristics-database@public-us/table/`.
 

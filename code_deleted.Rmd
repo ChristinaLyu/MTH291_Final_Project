@@ -1,0 +1,41 @@
+---
+title: "Code_deleted"
+author: "Christina Lyu"
+date: "12/14/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r,warning=FALSE, message=FALSE}
+
+#color code by political connection
+ggplot(gender_n_Selfmade, aes(x = Founding.Date, y = Net.Worth.Billion, color = factor(Political.Connection))) + 
+  geom_point()
+
+
+# model of Founding date and Political.Connection predicting the Net.Worth.Billion
+
+
+
+mod_date_poli <- lm(Net.Worth.Billion ~ Founding.Date + factor(Political.Connection), gender_n_Selfmade)
+
+summary(mod_date_poli)
+
+```
+
+```{r,warning=FALSE, message=FALSE}
+
+# color code by the type of company 
+ggplot(gender_n_Selfmade, aes(x = Age, y = Net.Worth.Billion, color = Company.type)) +
+  geom_point()
+
+
+# model of Founding date and Industry predicting the Net.Worth.Billion
+mod_age_comp <- lm(Net.Worth.Billion ~ Age + Company.type, gender_n_Selfmade)
+
+summary(mod_age_comp)
+```

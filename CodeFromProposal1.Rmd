@@ -33,10 +33,7 @@ library(car)
   
   The cleansing process of the data includes excluding rows with N.A and 0 values, creating additional binary predictors based on existing ones and fit models according to the new variables. 
   
-  
-### Methods:
-
-```{r, message=FALSE, warning=FALSE}
+```{r, include = FALSE, message=FALSE, warning=FALSE, result = FALSE}
 # read the csv file 
 billionaire <- read.csv("the-billionaire-characteristics-database.csv")
 
@@ -75,7 +72,12 @@ final_data <- founding_year_na %>%
 # remove all the na 
 na_billionare <- na.omit(tidy_billionaire)
 # there are only 61 observations when removed all the na from the dataset we removed some columns => not a resonable thing to do
+
+gender_n_Selfmade[complete.cases(gender_n_Selfmade), ]
 ```
+  
+  
+### Methods:
 
 ```{r}
 # correlation between variables
@@ -128,35 +130,9 @@ summary(mod_date_reg)
 
 ```
 
-```{r,warning=FALSE, message=FALSE}
-
-#color code by political connection
-ggplot(gender_n_Selfmade, aes(x = Founding.Date, y = Net.Worth.Billion, color = factor(Political.Connection))) + 
-  geom_point()
-
-
-# model of Founding date and Political.Connection predicting the Net.Worth.Billion
-
-
-
-mod_date_poli <- lm(Net.Worth.Billion ~ Founding.Date + factor(Political.Connection), gender_n_Selfmade)
-
-summary(mod_date_poli)
-
-```
-
-```{r,warning=FALSE, message=FALSE}
-
-# color code by the type of company 
-ggplot(gender_n_Selfmade, aes(x = Age, y = Net.Worth.Billion, color = Company.type)) +
-  geom_point()
-
-
-# model of Founding date and Industry predicting the Net.Worth.Billion
-mod_age_comp <- lm(Net.Worth.Billion ~ Age + Company.type, gender_n_Selfmade)
-
-summary(mod_age_comp)
-```
+*** 
+Not quite understand what it means
+***
 
 ```{r,warning=FALSE, message=FALSE}
 
@@ -168,9 +144,7 @@ ggplot(gender_n_Selfmade, aes(x = Age, y = Net.Worth.Billion, color = Gender)) +
 ```
 
 
-```{r}
-gender_n_Selfmade[complete.cases(gender_n_Selfmade), ]
-```
+
 
 ```{r}
 

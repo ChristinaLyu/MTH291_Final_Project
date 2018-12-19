@@ -439,6 +439,52 @@ new_2014_data$age_group <- factor(new_2014_data$age_group, levels = c("young_adu
 ggplot(new_2014_data, aes(x = age_group, y = Net_Worth_Billion, color = Region)) + geom_point()
 ```
 
+```{r}
+region_data <- new_2014_data %>% 
+  mutate(Western = ifelse(Region == "North America" | Region == "Europe", 1,0 ))
+
+data_western <- filter(region_data, Western == "1")
+
+data_none_western <- filter(region_data, Western == "0")
+
+# western countries
+stepwise_western <- regsubsets(Net_Worth_Billion ~ Industry_Aggregates + Selfmade + Type_of_Wealth + Industry + Relationship_to_Company + Gender + Sector + Company_type + Founding_Date + Political_Connection + Region + Characteristics + age_group + company_age, data = data_western, nbest = 1, really.big = TRUE, method = "seqrep")
+
+with(summary(stepwise_western), data.frame(rsq, adjr2, cp, rss, bic, outmat))
+
+# none western countries
+stepwise_none_western <- regsubsets(Net_Worth_Billion ~ Industry_Aggregates + Selfmade + Type_of_Wealth + Industry + Relationship_to_Company + Gender + Sector + Company_type + Founding_Date + Political_Connection + Region + Characteristics + age_group + company_age, data = data_none_western, nbest = 1, really.big = TRUE, method = "seqrep")
+
+with(summary(stepwise_none_western), data.frame(rsq, adjr2, cp, rss, bic, outmat))
+```
+
+```{r}
+data_western <- data_western %>%
+  mutate(Chocolate = ifelse(Sector == "chocolates", 1, 0)) %>%
+  mutate(Vice_chairman = ifelse(Relationship_to_Company == 'founder/vice chairman', 1, 0)) %>%
+  mutate(Investment_via = ifelse(Sector == "investment (via holding company)", 1, 0))
+
+mod_western <- lm(Net_Worth_Billion ~ Chocolate + Vice_chairman + Fashion + Finance + Investment_via + Oil_refining + Software + Technology + Acquired, data_western )
+#Relationship_to_Companyvice.chairman.1, Sectorchocolates, SectorFashion, SectorFinance, Sectorinvestment..via.holding.company, SectorOil.refining, SectorSoftware, Sectortechnology, Company_typeacquired
+
+summary(mod_western)
+
+data_none_western <- data_none_western %>%
+  mutate(Commodities = ifelse(Sector == "commodities (sugar, cement flour)", 1, 0)) %>%
+  mutate(Apparel = ifelse(Sector == "apparel", 1, 0)) %>%
+  mutate(Construction_real_estate = ifelse(Sector == "construction/real estate", 1, 0)) %>%
+  mutate(Internet = ifelse(Sector == "internet", 1, 0)) %>%
+  mutate(Investment_banking_beer = ifelse(Sector == "investment banking/beer", 1, 0)) %>%
+  mutate(CEO = ifelse(Relationship_to_Company == "CEO", 1, 0)) 
+
+mod_none_western <- lm(Net_Worth_Billion ~ CEO + Chairman + Apparel + Commodities + Communications + Construction_real_estate + Construction_real_estate_banking + Internet + Investment_banking_beer, data_none_western )
+# relationship_to_companyfounder.ceo,  relationship_to_companyfounder.chairman, sector apparel, sector commodities. sugar.cement. flour, sector communication, sector construction.real.estate, Sectorconstruction.real.estate.banking, sector internet, Sectorinvestment.banking.beer,
+
+summary(mod_none_western)
+
+```
+
+
 ### Statistics:
 
 ### Results:

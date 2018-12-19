@@ -79,7 +79,8 @@ gender_n_Selfmade[complete.cases(gender_n_Selfmade), ]
 ```{r,message=FALSE, warning=FALSE}
 # color code by gender and shape by Selfmade or not 
 ggplot(gender_n_Selfmade, aes(x = Age, y = Net.Worth.Billion, color = Gender, shape = Selfmade)) +
-  geom_point()
+  geom_point() + 
+  
 
 
 # model of Age, Gender and Selfmade predicting the Net.Worth.Billion
@@ -107,13 +108,17 @@ summary(mod_date_ind)
 
 ```{r,message=FALSE, warning=FALSE}
 
+gender_n_Selfmade_n_region <- gender_n_Selfmade2[gender_n_Selfmade2$Region!="0.0", ]
+
+gender_n_Selfmade_n_region <- na.omit(gender_n_Selfmade_n_region)
+
 # color code by region
-ggplot(gender_n_Selfmade, aes(x = Founding.Date, y = Net.Worth.Billion, color = Region)) + 
+ggplot(gender_n_Selfmade_n_region, aes(x = Founding.Date, y = Net.Worth.Billion, color = Region)) + 
   geom_point()
 
 
 # model of Founding date and region predicting the Net.Worth.Billion
-mod_date_reg <- lm(Net.Worth.Billion ~ Founding.Date + Region, gender_n_Selfmade)
+mod_date_reg <- lm(Net.Worth.Billion ~ Founding.Date + Region, gender_n_Selfmade_n_region)
 
 summary(mod_date_reg)
 

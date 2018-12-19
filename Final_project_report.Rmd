@@ -12,23 +12,19 @@ output: html_document
 
 ### Introduction : 
 
-##### Just like in your proposal, you should clearly state your primary research question. Build a case for why your research question is important. Don’t assume that “it’s obvious”. Explain why your question is relevant and what the implications might be if you find an association. Make citations where appropriate. 
-
 <br>
 
 ##### Everyone has a billionaire dream. Having money means living in mansions, flying private planes, attending parties and meeting celebrities. It is very unlikely to know a billionaire personally, but we can learn about their life stories from books and interviews. They might not be true, but they gives us some characters to look up to in case someday we might also become billionaires. We assume that billionaires share similar characteristics, which are not possessed by the general public and are essential to the outcome of becoming billionaires. Therefore, we want to investigate the shared characteristics of billionaires.
 
-### Data:
+<br>
 
-##### State where your data came from and how it was collected. What are the cases and variables in your data set? Include any information/definitions which helps establish the context of your data. 
+### Data:
 
 <br>
 
 ##### The data we found is called “The Billionaire Characteristics Database” from the website OpenDataSoft. It examines the billionaires listed on Forbes for 20 years and collect information about them and their companies according to the magazine Rich People Poor Countries.
-The observations in the dataset are each billionaire and the columns contain information about themselves and their companies, including age, gender, the industry their business mainly dwell in and many more. To explore the relationship between billionaires and the common characteristics, we use their net worth Net.Worth.Billion as the response variable and the others as predictors. One predictor is Rank, which is the rank of the billionaires in Forbes. As they are ranked based on their net worth, Rank is clearly strongly related to Net.Worth.Billion, but it is not a very informative predictor to interpret the common characteristics of the billionaires. 
-The cleansing process of the data includes excluding rows with N.A and 0 values, creating additional binary predictors based on existing ones and fitting models according to the new variables.
-Before we decide which models to fit, we want to get a general interpretation of the data and see if there exists any relationship between the response variable and potential predictors. 
-First we try to determine if there’s causal relationship between Net.Worth.Billion and Age/Selfmade/Gender. The scatter plot (Image 1) shows that the dots representing different values of the variables do not have a spread trend or form different clusters. They seem to just randomly scatter within a certain range and form one big cluster where there does not exist obvious trend or relationship between the variables.
+##### The observations in the dataset are each billionaire and the columns contain information about themselves and their companies, including age, gender, the industry their business mainly dwell in and many more. To explore the relationship between billionaires and the common characteristics, we use their net worth Net.Worth.Billion as the response variable and the others as predictors. One predictor is Rank, which is the rank of the billionaires in Forbes. As they are ranked based on their net worth, Rank is clearly strongly related to Net.Worth.Billion, but it is not a very informative predictor to interpret the common characteristics of the billionaires. 
+##### The cleansing process of the data includes excluding rows with N.A and 0 values, creating additional binary predictors based on existing ones and fitting models according to the new variables.
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -83,6 +79,14 @@ na_billionare <- na.omit(tidy_billionaire)
 gender_n_Selfmade[complete.cases(gender_n_Selfmade), ]
 ```
 
+
+##### Before attempting to find answers to our research question, we first analyzed several of the variables in relationship to the net worth of a billionaire. The following graphs will discuss some of the basic relationships found.
+
+<br>
+
+1) Net Worth Billion vs Age (across gender and source of fortune)
+
+
 ```{r,message=FALSE, warning=FALSE}
 # color code by gender and shape by Selfmade or not 
 ggplot(gender_n_Selfmade, aes(x = Age, y = Net.Worth.Billion, color = Gender, shape = Selfmade)) +
@@ -90,11 +94,10 @@ ggplot(gender_n_Selfmade, aes(x = Age, y = Net.Worth.Billion, color = Gender, sh
   labs(title = "Net Worth vs Age", y = "Net Worth (billions)") 
 ```
 
-Image 1: Scatterplot mapping Net.Worth.Billion and Age with marks of Gender and Selfmade
+##### The first scatterplot that was constructed summarized the relationship between net worth of a billionaire and age, taking into consideration the gender of the billionaire and whether their fortune was inherited or not. The scatterplot above indicates that the majority of the billionaires are male and so are the ones with the highest net worth. Surprisingly, the majority of the wealthiest female billionaires inherited their fortune while the majority of the wealthiest male billionaires are self made. Furthermore, the majority of the billionaires are aged 50 and above.
 
 
-##### Then, we want to see if Industry has a significant relationship with net worth of the billionaires. If there is, we expect different industries to form different clusters with noticeable separations. However, from the visualization (Image 2) we can see that there is no noticeable relationship between the variables. 
-
+2) Net Worth Billion vs Founding Date of the Company (across industries)
 
 ```{r, include = FALSE, message=FALSE, warning=FALSE, result = FALSE}
 gender_n_Selfmade2 <- gender_n_Selfmade[gender_n_Selfmade$Industry!="0.0", ]
@@ -108,15 +111,11 @@ ggplot(gender_n_Selfmade2, aes(x = Founding.Date, y = Net.Worth.Billion, color =
 ```
 
 
-
-Image 2: Scatterplot mapping Net Worth (billions) and Founding Data of the Company with variation of Industry
-
-<br>
-
-##### The other visualizations we created also show similar result with no obvious relationship between the variables. The general shape of the cluster is the same, but the values for color coded predictors are always randomly scattered in the shape and making it hard to conclude any specific conclusion about the relationship between the variables. 
+##### The second scatterplot describes the relationship between the net worth of a billionaire and the founding date of the company depending on what industry it was part of. In the early 1700s, most of the billionaires that existed were associated with a company that was related to the real estate sector. This is understandable since at that time people were mostly making business out of land and property. As we approach the mid 1900s and early 2000s, more billionaires appear to be associated with companies that are within different sectors such as retail and technology sector. This is also understandable as the economy’s continue to grow and include a wide range of business activities. Finally, the scatterplot indicates that as of the 2000s, the billionaires with the highest net worth are associated with the technology sector.
 
 
-##### To have a general idea of how the data looks like, we have provided several scatterplots among the most relevant variables. The following scatter plot describes the relationship among networth of a billionaire and the founding date of their company depending on the region they come from. For instance, in the early 1700s, there were only few billionaires (with relatively low net worths) and the majority of them were of the region Europe. As we approach the mid 1900s and early 2000, more billionaires (with also higher networth) appear from several different regions. However, the majority of the billionaires, whether they are of high net worth or low net worth, are associated with the region Europe or North America (Image 3).
+
+3) Net Worth Billion vs Founding Date of the Company (across regions)
 
 ```{r, include = FALSE, message=FALSE, warning=FALSE, result = FALSE}
 gender_n_Selfmade_n_region <- gender_n_Selfmade2[gender_n_Selfmade2$Region!="0.0", ]
@@ -133,9 +132,9 @@ ggplot(gender_n_Selfmade_n_region, aes(x = Founding.Date, y = Net.Worth.Billion,
 
 ```
 
-Image 3: Scatterplot mapping Net Worth (billions) and Founding Data of the Company with variation of Regions
+##### The third scatter plot describes the relationship among networth of a billionaire and the founding date of their company depending on the region they come from. For instance, in the early 1700s, there were only few billionaires (with relatively low net worths) and the majority of them were of the region Europe. As we approach the mid 1900s and early 2000, more billionaires (with also higher net worth) appear from several different regions. However, the majority of the billionaires, whether they have high net worth or low net worth, are associated with the region Europe or North America.
 
-##### The next graph we have provided is a scatterplots of Net Worth of Billionaires and age based on each region. Most of the billionaires, despite the region they come from, are aged 50 and above. Also, the scatterplots of North America, Europe and East Asia indicate that numerous billionaires are located in those regions (they have more dots). According to the data, the wealthiest billionaire is from America, the second wealthiest is from Latin America and the third wealthiest is from Europe. Furthermore, each scatterplot includes a regression line that fits the relationship between Age and the Net worth billion in that specific region. The strongest positive relationship between age and net worth billion (steepest regression line) is found in the scatterplot describing the region Europe. This indicates that out of the 7 regions, it is more common that as a billionaire's age increases, so does his/her net worth. The weakest relationship between net worth of a billionaire and age is seen in the region Middle East/North Africa. This indicates that net worth of a billionaire doesn’t have a relationship with age of the billionaires (Image 4).
+4) Net Worth Billion vs Age (across each region)
 
 ```{r, include = FALSE, message=FALSE, warning=FALSE, result = FALSE}
 
@@ -164,17 +163,21 @@ ggplot(final_data_1, aes(x = Age, y = Net_Worth_Billion)) +
   labs(title = "Net Worth vs Age", subtitle = "Looking by Regions", y = "Net Worth (billions)")
 
 ```
-Image 4: Scatterplot mapping Net Worth (billions) and Age which looks at each region 
+###### The fourth graph provides scatterplots of net worth of billionaires and age based on each region. Most of the billionaires, despite the region they come from, are aged 50 and above. Also, the scatterplots of North America, Europe and East Asia indicate that numerous billionaires are located in those regions (more dots). According to the data, the wealthiest billionaire is from America, the second wealthiest is from Latin America and the third wealthiest is from Europe. Furthermore, each scatterplot includes a regression line that fits the relationship between Age and the Net Worth (billion) in that specific region. The strongest positive relationship between age and net worth billion (steepest regression line) is found in the scatterplot describing the region Europe. This indicates that out of the 7 regions, it is more common that as a billionaire's age increases, so does his/her net worth. The weakest relationship between net worth of a billionaire and age is seen in the region Middle East/North Africa. This indicates that net worth of a billionaire doesn’t have a relationship with age of the billionaires.
 
 <br>
 
 ### Methods:
 
+<br>
 
+##### Initially the dataset consisted of 27 independent variables. Throughout the analysis, some independent variables were deleted based on their relevance to our research question. We ended up with 15 variables and as a first step to building a model, we ran a stepwise regression. To simplify the process, we changed the variable age to a categorical variable which summarized age into three groups: young adult, adult and senior. The best model that was generated had errors that were not normally distributed and hence, a transformation was required. However, applying log transformation to our response variable did not lead to normally distributed errors and hence, we could not base our analysis on this model. Thus, our next approach was to use Randomization since it does not require the errors to be normally distributed. From the results, we decided that rank and year should be both excluded. The final model that we constructed focuses on 2014 billionaires based on whether they identify as Westerners or not. Similarily, the errors were not normally distributed, so we applied the randomization procedure.
 
-Explain what statistical methods you will use for each question you hope to answer in your analysis. The methods section can be thought of as a recipe. The reader of your paper should be able to read your methods section, and then be able to duplicate the results that you present in the next section. (
+<br>
 
 ### Statistics and Results: 
+
+<br>
 
 #### The model including all variables except age 
 ```{r, message=FALSE, warning=FALSE}
@@ -362,13 +365,6 @@ summary(rand.test_none)
 
 ##### The coefficient of the original data falls outside of the 95% range of the distribution of randomization, so we reject the null hypothesis and conclude that the model is significant.  
 
-6. Basic descriptive statistics/summary statistics: Show the distributions (and/or summary statistics) of your most important variables. You may use a table of summary statistics if you have several variables to report on.
-
-
-
-7. Results: Report the statistical results of your analysis (relevant graphs, numerical summaries, etc) in the SAME ORDER in which they were described in your methods section. Describe what your graphs are telling you and use numerical summaries when appropriate. For MLR, report the results (equation, summaries, whether conditions are met) related to your final model and how you arrived at the model. If you have done hypothesis tests, present the results by reporting whether or not the conditions were met, the test statistics, p-values, and interpretation of the p-values. Report and interpret your confidence intervals. Make sure to interpret the results in context. Identify any outliers that need explaining. Avoid interpretive sentences (those are for the discussion section) and just
-state what you found. 
-
 
 H##### owever, the evaluation plots for the linear model indicates that the model violates the Equal Variance assumption for residuals, the Normality assumption for data. Therefore, it is not advised to use the linear model in plotting the data. However, in the leverage plot, it shows that there is no data points in the set with a Cook’s distance greater than 0.5, which means that all data points in the set are not considered outliers at the 0.5 level. 
 
@@ -385,12 +381,9 @@ The restrictions we have on our data is that the predictors do not seem to be ve
 Some new questions raised when trying to solve our current problem. One question is what are some characteristic for a billionaire to have net worth higher than the mean net worth of the billionaires of a certain year. Another question is how to determine if a person is a billionaire or not with the new dataset of both billionaires and millionaires information. We would add a new binary variable Billionaire that has 1 if the observation is a billionaire and 0 if it is a millionaire based on the value of the Net.Worth.Billion, and we would fit models to see if there are certain predictors very significant to distinguish billionaires from millionaires. 
 
 
-9. References: Attach a bibliography of the articles that you have cited and the data sources that you used.
-Additional guidelines
-Proof read your report. Make sure the tone is formal. For example, say “We sought to determine if sleeping habits are associated with study habits” not “We thought it might be interesting to look at sleep and study habits to see if there is an association”.
-
-
 
 “The Billionaire Characteristics Database.” OpenDataSoft -, data.opendatasoft.com/explore/dataset/the-billionaire-characteristics-database@public-us/table/.
 #####
+
+
 

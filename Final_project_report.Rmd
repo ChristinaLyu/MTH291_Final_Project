@@ -385,5 +385,6 @@ Some new questions raised when trying to solve our current problem. One question
 “The Billionaire Characteristics Database.” OpenDataSoft -, data.opendatasoft.com/explore/dataset/the-billionaire-characteristics-database@public-us/table/.
 #####
 
-
+"Git hub"-, https://github.com/ChristinaLyu/MTH291_Final_Project.git
+#####
 

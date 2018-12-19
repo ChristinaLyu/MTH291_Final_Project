@@ -5,58 +5,372 @@ date: "12/2/2018"
 output: html_document
 ---
 
-Abstract:
+### Abstract:
 
 (inreportonly,notnecessaryinpresentation):Theabstractshould be a 4-8 sentence paragraph that clearly (but concisely) describes your main research questions, the type of data you have, and your primary findings.
   Our research question is "What are some common characteristics for billionaires?". Our assumption is that most billionaires' wealth is inherited and they are mainly male. The data we use has a quantitative response variable and several categorical predictors. The test statistics show that billionaires with business in the fields including Communications, Technology tend to have a significant higher net worth than others. It has also been found that the two variables Year and Rank explain the most variance in the net worth of billionaires. 
 
 ### Introduction : 
 
-Just like in your proposal, you should clearly state your primary research question. Build a case for why your research question is important. Don’t assume that “it’s obvious”. Explain why your question is relevant and what the implications might be if you find an association. Make citations where appropriate. 
+##### Just like in your proposal, you should clearly state your primary research question. Build a case for why your research question is important. Don’t assume that “it’s obvious”. Explain why your question is relevant and what the implications might be if you find an association. Make citations where appropriate. 
 
-Everyone has a billionaire dream. Having money means living in mansions, flying private planes, attending parties and meeting celebrities. It is very unlikely to know a billionaire personally, but we can learn about their life stories from books and interviews. They might not be true, but they gives us some characters to look up to in case someday we might also become billionaires. We assume that billionaires share similar characteristics, which are not possessed by the general public and are essential to the outcome of becoming billionaires. Therefore, we want to investigate the shared characteristics of billionaires.
+<br>
 
-Data:
+##### Everyone has a billionaire dream. Having money means living in mansions, flying private planes, attending parties and meeting celebrities. It is very unlikely to know a billionaire personally, but we can learn about their life stories from books and interviews. They might not be true, but they gives us some characters to look up to in case someday we might also become billionaires. We assume that billionaires share similar characteristics, which are not possessed by the general public and are essential to the outcome of becoming billionaires. Therefore, we want to investigate the shared characteristics of billionaires.
 
-State where your data came from and how it was collected. What are the cases and variables in your data set? Include any information/definitions which helps establish the context of your data. 
+### Data:
 
-The data we found is called “The Billionaire Characteristics Database” from the website OpenDataSoft. It examines the billionaires listed on Forbes for 20 years and collect information about them and their companies according to the magazine Rich People Poor Countries.
+##### State where your data came from and how it was collected. What are the cases and variables in your data set? Include any information/definitions which helps establish the context of your data. 
+
+<br>
+
+##### The data we found is called “The Billionaire Characteristics Database” from the website OpenDataSoft. It examines the billionaires listed on Forbes for 20 years and collect information about them and their companies according to the magazine Rich People Poor Countries.
 The observations in the dataset are each billionaire and the columns contain information about themselves and their companies, including age, gender, the industry their business mainly dwell in and many more. To explore the relationship between billionaires and the common characteristics, we use their net worth Net.Worth.Billion as the response variable and the others as predictors. One predictor is Rank, which is the rank of the billionaires in Forbes. As they are ranked based on their net worth, Rank is clearly strongly related to Net.Worth.Billion, but it is not a very informative predictor to interpret the common characteristics of the billionaires. 
 The cleansing process of the data includes excluding rows with N.A and 0 values, creating additional binary predictors based on existing ones and fitting models according to the new variables.
 Before we decide which models to fit, we want to get a general interpretation of the data and see if there exists any relationship between the response variable and potential predictors. 
 First we try to determine if there’s causal relationship between Net.Worth.Billion and Age/Selfmade/Gender. The scatter plot (Image 1) shows that the dots representing different values of the variables do not have a spread trend or form different clusters. They seem to just randomly scatter within a certain range and form one big cluster where there does not exist obvious trend or relationship between the variables.
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(mosaic)
+library(leaps)
+library(car)
+```
+
+```{r, include = FALSE, message=FALSE, warning=FALSE, result = FALSE}
+# read the csv file 
+billionaire <- read.csv("the-billionaire-characteristics-database.csv")
+
+#tidy up the dataset 
+tidy_billionaire <- subset(billionaire, select = -c(3, 4, 5, 10, 15, 17, 21, 23, 24, 25,26))
+
+# change the blank cell into a NA
+tidy_billionaire[tidy_billionaire == ""] <- NA
+
+without_na <- na.omit(tidy_billionaire)
+
+# excluded NA for gender
+na_gender <- subset(tidy_billionaire, !is.na(Gender))
+
+# excluded NA for selfmade and exclude NA for gender
+gender_n_Selfmade <- subset(na_gender, !is.na(Selfmade))
+
+# change NA in Political.Connections into 0
+gender_n_Selfmade$Political.Connection[is.na(gender_n_Selfmade$Political.Connection)] <- 0
+
+# create a age group (youth, young_adult, adult, senior)
+age_billionare <- gender_n_Selfmade %>% 
+  mutate(age_group = ifelse((Age >= -42 & Age <= 18 & Age == 0), 'youth', ifelse((Age > 18 & Age <= 35), 'young_adult', ifelse((Age > 35 & Age <= 55), 'adult', ifelse((Age > 55), 'senior', 'other')))))
+
+# removing age_group NA valuables
+age_group_na <- subset(age_billionare, !is.na(age_group))
+
+#removing founding year NA variables
+founding_year_na <- subset(age_group_na, !is.na(Founding.Date))
+
+#age of company 
+final_data <- founding_year_na %>%
+  mutate(company_age = 2016 - Founding.Date)
+
+
+# remove all the na 
+na_billionare <- na.omit(tidy_billionaire)
+# there are only 61 observations when removed all the na from the dataset we removed some columns => not a resonable thing to do
+
+gender_n_Selfmade[complete.cases(gender_n_Selfmade), ]
+```
+
+```{r,message=FALSE, warning=FALSE}
+# color code by gender and shape by Selfmade or not 
+ggplot(gender_n_Selfmade, aes(x = Age, y = Net.Worth.Billion, color = Gender, shape = Selfmade)) +
+  geom_point() + 
+  labs(title = "Net Worth vs Age", y = "Net Worth (billions)") 
+```
 
 Image 1: Scatterplot mapping Net.Worth.Billion and Age with marks of Gender and Selfmade
 
 
-Then, we want to see if Industry has a significant relationship with net worth of the billionaires. If there is, we expect different industries to form different clusters with noticeable separations. However, from the visualization (Image 2) we can see that there is no noticeable relationship between the variables. 
-
-Image 2: Scatterplot mapping Net.Worth.Billion and Founding.Date with variation of Industry
-The other visualizations we created also show similar result with no obvious relationship between the variables. The general shape of the cluster is the same, but the values for color coded predictors are always randomly scattered in the shape and making it hard to conclude any specific conclusion about the relationship between the variables. 
+##### Then, we want to see if Industry has a significant relationship with net worth of the billionaires. If there is, we expect different industries to form different clusters with noticeable separations. However, from the visualization (Image 2) we can see that there is no noticeable relationship between the variables. 
 
 
-To have a general idea of how the data looks like, we have provided several scatterplots among the most relevant variables. The following scatter plot describes the relationship among networth of a billionaire and the founding date of their company depending on the region they come from. For instance, in the early 1700s, there were only few billionaires (with relatively low net worths) and the majority of them were of the region Europe. As we approach the mid 1900s and early 2000, more billionaires (with also higher networth) appear from several different regions. However, the majority of the billionaires, whether they are of high net worth or low net worth, are associated with the region Europe or North America.
+```{r, include = FALSE, message=FALSE, warning=FALSE, result = FALSE}
+gender_n_Selfmade2 <- gender_n_Selfmade[gender_n_Selfmade$Industry!="0.0", ]
+```
+
+```{r, message=FALSE, warning=FALSE}
+# color code by Industry
+ggplot(gender_n_Selfmade2, aes(x = Founding.Date, y = Net.Worth.Billion, color = Industry)) + 
+  geom_point() + 
+  labs(title = "Net Worth vs Founding Date of the Company", subtitle = "Looking at Industries", x = "Founding Date of the Company", y = "Net Worth (billions)")
+```
 
 
-The next graph we have provided is a scatterplots of Net Worth of Billionaires and age based on each region. Most of the billionaires, despite the region they come from, are aged 50 and above. Also, the scatterplots of North America, Europe and East Asia indicate that numerous billionaires are located in those regions (they have more dots). According to the data, the wealthiest billionaire is from America, the second wealthiest is from Latin America and the third wealthiest is from Europe. Furthermore, each scatterplot includes a regression line that fits the relationship between Age and the Net worth billion in that specific region. The strongest positive relationship between age and net worth billion (steepest regression line) is found in the scatterplot describing the region Europe. This indicates that out of the 7 regions, it is more common that as a billionaire's age increases, so does his/her net worth. The weakest relationship between net worth of a billionaire and age is seen in the region Middle East/North Africa. This indicates that net worth of a billionaire doesn’t have a relationship with age of the billionaires.
 
-Methods:
+Image 2: Scatterplot mapping Net Worth (billions) and Founding Data of the Company with variation of Industry
+
+<br>
+
+##### The other visualizations we created also show similar result with no obvious relationship between the variables. The general shape of the cluster is the same, but the values for color coded predictors are always randomly scattered in the shape and making it hard to conclude any specific conclusion about the relationship between the variables. 
+
+
+##### To have a general idea of how the data looks like, we have provided several scatterplots among the most relevant variables. The following scatter plot describes the relationship among networth of a billionaire and the founding date of their company depending on the region they come from. For instance, in the early 1700s, there were only few billionaires (with relatively low net worths) and the majority of them were of the region Europe. As we approach the mid 1900s and early 2000, more billionaires (with also higher networth) appear from several different regions. However, the majority of the billionaires, whether they are of high net worth or low net worth, are associated with the region Europe or North America (Image 3).
+
+```{r, include = FALSE, message=FALSE, warning=FALSE, result = FALSE}
+gender_n_Selfmade_n_region <- gender_n_Selfmade2[gender_n_Selfmade2$Region!="0.0", ]
+
+gender_n_Selfmade_n_region <- na.omit(gender_n_Selfmade_n_region)
+```
+
+```{r,message=FALSE, warning=FALSE}
+
+# color code by region
+ggplot(gender_n_Selfmade_n_region, aes(x = Founding.Date, y = Net.Worth.Billion, color = Region)) + 
+  geom_point() + 
+  labs(title = "Net Worth vs Founding Date of the Company", subtitle = "Looking by Regions", x = "Founding Date of the Company", y = "Net Worth (billions)")
+
+```
+
+Image 3: Scatterplot mapping Net Worth (billions) and Founding Data of the Company with variation of Regions
+
+##### The next graph we have provided is a scatterplots of Net Worth of Billionaires and age based on each region. Most of the billionaires, despite the region they come from, are aged 50 and above. Also, the scatterplots of North America, Europe and East Asia indicate that numerous billionaires are located in those regions (they have more dots). According to the data, the wealthiest billionaire is from America, the second wealthiest is from Latin America and the third wealthiest is from Europe. Furthermore, each scatterplot includes a regression line that fits the relationship between Age and the Net worth billion in that specific region. The strongest positive relationship between age and net worth billion (steepest regression line) is found in the scatterplot describing the region Europe. This indicates that out of the 7 regions, it is more common that as a billionaire's age increases, so does his/her net worth. The weakest relationship between net worth of a billionaire and age is seen in the region Middle East/North Africa. This indicates that net worth of a billionaire doesn’t have a relationship with age of the billionaires (Image 4).
+
+```{r, include = FALSE, message=FALSE, warning=FALSE, result = FALSE}
+
+names(final_data) <-c("Year", "Rank", "Net_Worth_Billion", "Age", "Industry_Aggregates", "Selfmade", "Type_of_Wealth", "Industry", "Relationship_to_Company", "Gender", "Sector", "Company_type", "Founding_Date", "Political_Connection", "Region", "Characteristics", "age_group", "company_age")
+
+final_data[final_data$Sector == "Communications", ]
+
+final_data_1 <- final_data %>%
+  mutate(SectorCommunications = ifelse(Sector == "Communications", 1, 0)) %>%
+  mutate(SectorFashion = ifelse(Sector == "fashion", 1, 0)) %>%
+  mutate(SectorTechnology = ifelse(Sector == "technology", 1, 0)) %>%
+  mutate(SectorFinance = ifelse(Sector == "finance", 1, 0)) %>%
+  mutate(SectorSoftware = ifelse(Sector == "software", 1, 0)) %>%
+  mutate(Company_typeacquired = ifelse(Company_type == "acquired", 1, 0)) %>%
+  mutate(SectorOilRefining = ifelse(Sector == "oil refining", 1, 0))
+
+final_data_1 <- final_data_1[final_data_1$Region!="0.0", ]
+```
+
+
+```{r, message=FALSE, warning=FALSE}
+
+#billionare age dividing by region
+ggplot(final_data_1, aes(x = Age, y = Net_Worth_Billion)) + 
+  geom_point() + facet_grid(. ~Region) + geom_smooth(method = 'lm', se = FALSE) +
+  labs(title = "Net Worth vs Age", subtitle = "Looking by Regions", y = "Net Worth (billions)")
+
+```
+Image 4: Scatterplot mapping Net Worth (billions) and Age which looks at each region 
+
+<br>
+
+### Methods:
 
 
 
 Explain what statistical methods you will use for each question you hope to answer in your analysis. The methods section can be thought of as a recipe. The reader of your paper should be able to read your methods section, and then be able to duplicate the results that you present in the next section. (
 
+### Statistics and Results: 
 
+#### The model including all variables except age 
+```{r, message=FALSE, warning=FALSE}
+# construct stepwise selection to get significant variables
+stepwise <- regsubsets(Net_Worth_Billion ~ Year + Rank + Industry_Aggregates + Selfmade + Type_of_Wealth + Industry + Relationship_to_Company + Gender + Sector + Company_type + Founding_Date + Political_Connection + Region + Characteristics + age_group + company_age, data = final_data, nbest = 1, really.big = TRUE, method = "seqrep")
+
+with(summary(stepwise), data.frame(rsq, adjr2, cp, rss, bic, outmat))
+
+```
+
+##### We chose the model with nine variables because it has the highest adjusted R square, lowest cp and bic variable. The nine variables in the model are Year, Rank, Sector Communication, Sector Fashion, Sector Finance, Sector Software, Sector Technology, Company type acquired and Sector Oil Refining. 
+
+```{r,include = FALSE, message=FALSE, warning=FALSE, result = FALSE}
+final_data[final_data$Sector == "Communications", ]
+
+final_data_1 <- final_data %>%
+  mutate(SectorCommunications = ifelse(Sector == "Communications", 1, 0)) %>%
+  mutate(SectorFashion = ifelse(Sector == "fashion", 1, 0)) %>%
+  mutate(SectorTechnology = ifelse(Sector == "technology", 1, 0)) %>%
+  mutate(SectorFinance = ifelse(Sector == "finance", 1, 0)) %>%
+  mutate(SectorSoftware = ifelse(Sector == "software", 1, 0)) %>%
+  mutate(Company_typeacquired = ifelse(Company_type == "acquired", 1, 0)) %>%
+  mutate(SectorOilRefining = ifelse(Sector == "oil refining", 1, 0))
+```
+
+```{r, message=FALSE, warning=FALSE}
+m <- lm(Net_Worth_Billion ~ Year + Rank + SectorCommunications + SectorFashion + SectorFinance + SectorSoftware + SectorTechnology + Company_typeacquired + SectorOilRefining, data = final_data_1)
+summary(m)
+```
+
+#### Before transformation 
+
+```{r, message=FALSE, warning=FALSE}
+plot(m,  which = 1)
+```
+
+##### The plot does not follow a linear trend which violates linearity. Therefore, we applied transformation. 
+
+#### transformation
+```{r, message=FALSE, warning=FALSE}
+m2 <- lm(log(Net_Worth_Billion) ~ Year + Rank + SectorCommunications + SectorFashion + SectorFinance + SectorSoftware + SectorTechnology + Company_typeacquired, data = final_data_1)
+summary(m2)
+plot(m2,  which = 1)
+```
+
+##### Even we applied transformation, the plot still did not follow a linear trend. Therefore, we did a randomization test to see if the model is significant or not. 
+
+##### randomizaiton 
+
+##### We set the null hypothesis as 
+$H_0_$ : ρ = 0
+
+$H_a_$ : ρ != 0
+
+```{r, include = FALSE, message=FALSE, warning=FALSE, result = FALSE}
+# omit NA values
+NA_final_data <- na.omit(final_data_1)
+```
+
+```{r, message=FALSE, warning=FALSE}
+# coefficients of the original data 
+cor(Net_Worth_Billion ~ Year + Rank + SectorCommunications + SectorFashion + SectorFinance + SectorSoftware + SectorTechnology + Company_typeacquired, data = NA_final_data)
+
+# point estimate
+cor(Net_Worth_Billion ~ shuffle(Year + Rank + SectorCommunications + SectorFashion + SectorFinance + SectorSoftware + SectorTechnology + Company_typeacquired), data = NA_final_data)
+
+#randomization
+rand.test1 <- do(5000) * cor(Net_Worth_Billion ~ shuffle(Year + Rank + SectorCommunications + SectorFashion + SectorFinance + SectorSoftware + SectorTechnology + Company_typeacquired), data = NA_final_data)
+
+densityplot(~cor, data=rand.test1)
+
+summary(rand.test1)
+
+```
+
+##### The correlation coefficient of the original data falls in the far left end of the distribution generated by randomization. Therefore, we reject the null hypothesis so the model is significant. 
+
+<br>
+
+#### Deviding the Billionares into two groups: Western and None Western 
+
+```{r, include = FALSE, message=FALSE, warning=FALSE, result = FALSE}
+region_data <- new_2014_data %>% 
+  mutate(Western = ifelse(Region == "North America" | Region == "Europe", 1,0 ))
+
+data_western <- filter(region_data, Western == "1")
+
+data_none_western <- filter(region_data, Western == "0")
+
+```
+
+```{r, message=FALSE, warning=FALSE}
+# western countries
+stepwise_western <- regsubsets(Net_Worth_Billion ~ Industry_Aggregates + Selfmade + Type_of_Wealth + Industry + Relationship_to_Company + Gender + Sector + Company_type + Founding_Date + Political_Connection + Region + Characteristics + age_group + company_age, data = data_western, nbest = 1, really.big = TRUE, method = "seqrep")
+
+with(summary(stepwise_western), data.frame(rsq, adjr2, cp, rss, bic, outmat))
+
+# none western countries
+stepwise_none_western <- regsubsets(Net_Worth_Billion ~ Industry_Aggregates + Selfmade + Type_of_Wealth + Industry + Relationship_to_Company + Gender + Sector + Company_type + Founding_Date + Political_Connection + Region + Characteristics + age_group + company_age, data = data_none_western, nbest = 1, really.big = TRUE, method = "seqrep")
+
+with(summary(stepwise_none_western), data.frame(rsq, adjr2, cp, rss, bic, outmat))
+```
+
+##### The best model for both is the nine variables model. Both have the highest adjusted R square, lowest cp and bic values. The nine variables for Western are Sector Chocolate, Relationship to Company founder/vice chairman, Sector Fashion, Sector Finance, Sector Investiment (via holding company), Sector Oil refining, Sector Software, Sector Technology, and Company type Acquired. The nine variables for None Western are Relationship to Company CEO, Relationship to Company chairman, Sector Apparel, Secto Commodities (sugar, cement, flour), Sector Communication, Sector construction/real estate, Sector construction/real estate/banking, Sector Internet, and Sector Investment banking/beer.
+
+```{r, include = FALSE, message=FALSE, warning=FALSE, result = FALSE}
+data_western <- data_western %>%
+  mutate(Chocolate = ifelse(Sector == "chocolates", 1, 0)) %>%
+  mutate(Vice_chairman = ifelse(Relationship_to_Company == 'founder/vice chairman', 1, 0)) %>%
+  mutate(Investment_via = ifelse(Sector == "investment (via holding company)", 1, 0))
+
+data_none_western <- data_none_western %>%
+  mutate(Commodities = ifelse(Sector == "commodities (sugar, cement flour)", 1, 0)) %>%
+  mutate(Apparel = ifelse(Sector == "apparel", 1, 0)) %>%
+  mutate(Construction_real_estate = ifelse(Sector == "construction/real estate", 1, 0)) %>%
+  mutate(Internet = ifelse(Sector == "internet", 1, 0)) %>%
+  mutate(Investment_banking_beer = ifelse(Sector == "investment banking/beer", 1, 0)) %>%
+  mutate(CEO = ifelse(Relationship_to_Company == "CEO", 1, 0)) 
+```
+
+#### Multiple Regression model for Western
+```{r, message=FALSE, warning=FALSE}
+mod_western <- lm(Net_Worth_Billion ~ Chocolate + Vice_chairman + Fashion + Finance + Investment_via + Oil_refining + Software + Technology + Acquired, data_western )
+
+summary(mod_western)
+
+plot(mod_western, which = 1)
+```
+
+##### The distribution is not normal so we applied randomization. 
+
+```{r, include = FALSE, message=FALSE, warning=FALSE, result = FALSE}
+na_data_western <- na.omit(data_western)
+```
+
+
+```{r, message=FALSE, warning=FALSE}
+# coefficients of the original data 
+cor(Net_Worth_Billion ~ Chocolate + Vice_chairman + Fashion + Finance + Investment_via + Oil_refining + Software + Technology + Acquired, data = na_data_western)
+
+# point estimate
+cor(Net_Worth_Billion ~ shuffle(Chocolate + Vice_chairman + Fashion + Finance + Investment_via + Oil_refining + Software + Technology + Acquired), data = na_data_western)
+
+#randomization
+rand.test_western <- do(5000) * cor(Net_Worth_Billion ~ shuffle(Chocolate + Vice_chairman + Fashion + Finance + Investment_via + Oil_refining + Software + Technology + Acquired), data = na_data_western)
+
+densityplot(~cor, data=rand.test_western)
+
+summary(rand.test_western)
+
+```
+
+##### The coefficient of the original data falls far end of the distribution of randomization, so we reject the null hypothesis and conclude that the model is significant.  
+
+#### Multiple Regression model for None Western
+```{r, message=FALSE, warning=FALSE}
+mod_none_western <- lm(Net_Worth_Billion ~ CEO + Chairman + Apparel + Commodities + Communications + Construction_real_estate + Construction_real_estate_banking + Internet + Investment_banking_beer, data_none_western )
+
+summary(mod_none_western)
+plot(mod_none_western ,  which = 1)
+```
+
+##### The distribution is not normal so we applied randomization. 
+
+```{r, include = FALSE, message=FALSE, warning=FALSE, result = FALSE}
+na_none_western <- na.omit(data_none_western)
+```
+
+
+```{r, message=FALSE, warning=FALSE}
+# coefficients of the original data 
+cor(Net_Worth_Billion ~ CEO + Chairman + Apparel + Commodities + Communications + Construction_real_estate + Construction_real_estate_banking + Internet + Investment_banking_beer, data =  na_none_western)
+
+# point estimate
+cor(Net_Worth_Billion ~ shuffle(CEO + Chairman + Apparel + Commodities + Communications + Construction_real_estate + Construction_real_estate_banking + Internet + Investment_banking_beer), data = na_none_western)
+
+#randomization
+rand.test_none <- do(5000) * cor(Net_Worth_Billion ~shuffle(CEO + Chairman + Apparel + Commodities + Communications + Construction_real_estate + Construction_real_estate_banking + Internet + Investment_banking_beer), data = na_none_western)
+
+densityplot(~cor, data=rand.test_none)
+
+summary(rand.test_none)
+
+```
+
+##### The coefficient of the original data falls outside of the 95% range of the distribution of randomization, so we reject the null hypothesis and conclude that the model is significant.  
 
 6. Basic descriptive statistics/summary statistics: Show the distributions (and/or summary statistics) of your most important variables. You may use a table of summary statistics if you have several variables to report on.
+
 
 
 7. Results: Report the statistical results of your analysis (relevant graphs, numerical summaries, etc) in the SAME ORDER in which they were described in your methods section. Describe what your graphs are telling you and use numerical summaries when appropriate. For MLR, report the results (equation, summaries, whether conditions are met) related to your final model and how you arrived at the model. If you have done hypothesis tests, present the results by reporting whether or not the conditions were met, the test statistics, p-values, and interpretation of the p-values. Report and interpret your confidence intervals. Make sure to interpret the results in context. Identify any outliers that need explaining. Avoid interpretive sentences (those are for the discussion section) and just
 state what you found. 
 
 
-However, the evaluation plots for the linear model indicates that the model violates the Equal Variance assumption for residuals, the Normality assumption for data. Therefore, it is not advised to use the linear model in plotting the data. However, in the leverage plot, it shows that there is no data points in the set with a Cook’s distance greater than 0.5, which means that all data points in the set are not considered outliers at the 0.5 level. 
+H##### owever, the evaluation plots for the linear model indicates that the model violates the Equal Variance assumption for residuals, the Normality assumption for data. Therefore, it is not advised to use the linear model in plotting the data. However, in the leverage plot, it shows that there is no data points in the set with a Cook’s distance greater than 0.5, which means that all data points in the set are not considered outliers at the 0.5 level. 
 
 
 8. Discussion/conclusion: Answer your research question as best as you can based on your analysis so far. It’s a good idea to start the discussion section with “We found that....”. You should only interpret results that are described in your results section. Describe the big picture of your analysis and conclusions, and explain what you can and can’t tell about your data. Do your results confirm or contradict previous studies or beliefs that you hold? Discuss any problems encountered in your analysis. What are the limitations of your study? Are there any new questions raised by your study? Are there any other variables you would have liked to have obtained? 

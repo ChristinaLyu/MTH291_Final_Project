@@ -7,8 +7,7 @@ output: html_document
 
 ### Abstract:
 
-(inreportonly,notnecessaryinpresentation):Theabstractshould be a 4-8 sentence paragraph that clearly (but concisely) describes your main research questions, the type of data you have, and your primary findings.
-  Our research question is "What are some common characteristics for billionaires?". Our assumption is that most billionaires' wealth is inherited and they are mainly male. The data we use has a quantitative response variable and several categorical predictors. The test statistics show that billionaires with business in the fields including Communications, Technology tend to have a significant higher net worth than others. It has also been found that the two variables Year and Rank explain the most variance in the net worth of billionaires. 
+##### Our research question is "What are some common characteristics for billionaires?". The assumptions include that most billionaires' wealth is inherited and they are mainly male. The data we use has a quantitative response variable of Net.Worth.Billion and several quantitative and categorical predictors including Age, Sector and Industry. Using various regression methods, we were able to find different characteristics for billionaires with different age and geographic citizenships. 
 
 ### Introduction : 
 
@@ -175,7 +174,7 @@ ggplot(final_data_1, aes(x = Age, y = Net_Worth_Billion)) +
 
 <br>
 
-### Statistics and Results: 
+### Test Statistics and Results: 
 
 <br>
 
@@ -398,6 +397,11 @@ summary(rand.test_none)
 
 ##### The results left us with several questions that we would want to answer. For instance, was there a tremendous change from 2014 to 2017 billionaires? Also, did the relationship between western billionaires and oil refining grow from 2014 given that the U.S. officially became the largest global crude oil producer?
 
+<br>
+
+### Reference
+
+<br>
 
 “The Billionaire Characteristics Database.” OpenDataSoft -, data.opendatasoft.com/explore/dataset/the-billionaire-characteristics-database@public-us/table/.
 #####

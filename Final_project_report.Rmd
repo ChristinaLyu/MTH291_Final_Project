@@ -7,7 +7,7 @@ output: html_document
 
 ### Abstract:
 
-##### Our research question is "What are some common characteristics for billionaires?". The assumptions include that most billionaires' wealth is inherited and they are mainly male. The data we use has a quantitative response variable of Net.Worth.Billion and several quantitative and categorical predictors including Age, Sector and Industry. Using various regression methods, we were able to find different characteristics for billionaires with different age and geographic citizenships. 
+##### Our research question is "What are some common characteristics for billionaires?". The assumptions include that most billionaires' wealth is inherited and they are mainly male. The data we use has a quantitative response variable of Net.Worth.Billion and several quantitative and categorical predictors including Age, Sector and Industry. Using various regression methods including linear model and randomization, we were able to find different characteristics for billionaires with different age and geographic citizenships. 
 
 ### Introduction : 
 
@@ -170,7 +170,13 @@ ggplot(final_data_1, aes(x = Age, y = Net_Worth_Billion)) +
 
 <br>
 
-##### Initially the dataset consisted of 27 independent variables. Throughout the analysis, some independent variables were deleted based on their relevance to our research question. We ended up with 15 variables and as a first step to building a model, we ran a stepwise regression. To simplify the process, we changed the variable age to a categorical variable which summarized age into three groups: young adult, adult and senior. The best model that was generated had errors that were not normally distributed and hence, a transformation was required. However, applying log transformation to our response variable did not lead to normally distributed errors and hence, we could not base our analysis on this model. Thus, our next approach was to use Randomization since it does not require the errors to be normally distributed. From the results, we decided that rank and year should be both excluded. The final model that we constructed focuses on 2014 billionaires based on whether they identify as Westerners or not. Similarily, the errors were not normally distributed, so we applied the randomization procedure.
+##### Initially the dataset consisted of 27 independent variables. Throughout the analysis, some independent variables were deleted based on their relevance to our research question. We ended up with 15 variables and as a first step to building a model, we ran a stepwise regression. To simplify the process, we changed the variable age to a categorical variable which summarized age into three groups: young adult, adult and senior. 
+
+##### To determine the relationship between net worth of the billionaires and related characteristics, we first used a linear model to find general relationship between the response variables and the predictors. The linear model generated had errors that were not normally distributed and hence, a transformation was required. However, applying log transformation to our response variable did not lead to normally distributed errors and hence, we could not base our analysis on this model. 
+
+##### Thus, our next approach was to use Randomization since it does not require the errors to be normally distributed. From the results, we decided that rank and year should be both excluded. 
+
+##### The final model that we constructed focuses on 2014 billionaires based on whether they identify as Westerners or not. Similarily, the errors were not normally distributed, so we applied the randomization procedure.
 
 <br>
 

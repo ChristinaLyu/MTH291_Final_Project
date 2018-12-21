@@ -110,7 +110,7 @@ ggplot(gender_n_Selfmade2, aes(x = Founding.Date, y = Net.Worth.Billion, color =
 ```
 
 
-##### The second scatterplot describes the relationship between the net worth of a billionaire and the founding date of the company depending on what industry it was part of. In the early 1700s, most of the billionaires that existed were associated with a company that was related to the real estate sector. This is understandable since at that time people were mostly making business out of land and property. As we approach the mid 1900s and early 2000s, more billionaires appear to be associated with companies that are within different sectors such as retail and technology sector. This is also understandable as the economy’s continue to grow and include a wide range of business activities. Finally, the scatterplot indicates that as of the 2000s, the billionaires with the highest net worth are associated with the technology sector.
+##### The second scatterplot describes the relationship between the net worth of a billionaire and the founding date of the company depending on what industry it was part of. In the early 1700s, most of the billionaires that existed were associated with a company that was related to the real estate sector. This is understandable since at that time people were mostly making business out of land and property. As we approach the mid 1900s and early 2000s, more billionaires appear to be associated with companies that are within different sectors such as retail and technology sector. This is also understandable as the economies of countries continue to grow and include a wide range of business activities. Finally, the scatterplot indicates that as of the 2000s, the billionaires with the highest net worth are associated with the technology sector.
 
 
 
@@ -162,7 +162,7 @@ ggplot(final_data_1, aes(x = Age, y = Net_Worth_Billion)) +
   labs(title = "Net Worth vs Age", subtitle = "Looking by Regions", y = "Net Worth (billions)")
 
 ```
-###### The fourth graph provides scatterplots of net worth of billionaires and age based on each region. Most of the billionaires, despite the region they come from, are aged 50 and above. Also, the scatterplots of North America, Europe and East Asia indicate that numerous billionaires are located in those regions (more dots). According to the data, the wealthiest billionaire is from America, the second wealthiest is from Latin America and the third wealthiest is from Europe. Furthermore, each scatterplot includes a regression line that fits the relationship between Age and the Net Worth (billion) in that specific region. The strongest positive relationship between age and net worth billion (steepest regression line) is found in the scatterplot describing the region Europe. This indicates that out of the 7 regions, it is more common that as a billionaire's age increases, so does his/her net worth. The weakest relationship between net worth of a billionaire and age is seen in the region Middle East/North Africa. This indicates that net worth of a billionaire doesn’t have a relationship with age of the billionaires.
+###### The fourth graph provides scatterplots of net worth of billionaires and age based on each region. Most of the billionaires, despite the region they come from, are aged 50 and above. Also, the scatterplots of North America, Europe and East Asia indicate that numerous billionaires are located in those regions (more dots). According to the data, the wealthiest billionaire is from America, the second wealthiest is from Latin America and the third wealthiest is from Europe. Furthermore, each scatterplot includes a regression line that fits the relationship between Age and the Net Worth (billion) in that specific region. The strongest positive relationship between age and net worth billion (steepest regression line) is found in the scatterplot describing the region Europe. This indicates that out of the 7 regions, it is more common in Europe that as a billionaire's age increases, so does his/her net worth. The weakest relationship between net worth of a billionaire and age is seen in the region Middle East/North Africa (horizontal line). This indicates that net worth of a billionaire doesn’t have a relationship with age of the billionaires.
 
 <br>
 
@@ -172,7 +172,7 @@ ggplot(final_data_1, aes(x = Age, y = Net_Worth_Billion)) +
 
 ##### Initially the dataset consisted of 27 independent variables. Throughout the analysis, some independent variables were deleted based on their relevance to our research question. We ended up with 15 variables and as a first step to building a model, we ran a stepwise regression. To simplify the process, we changed the variable age to a categorical variable which summarized age into three groups: young adult, adult and senior. 
 
-##### To determine the relationship between net worth of the billionaires and related characteristics, we first used a linear model to find general relationship between the response variables and the predictors. The linear model generated had errors that were not normally distributed and hence, a transformation was required. However, applying log transformation to our response variable did not lead to normally distributed errors and hence, we could not base our analysis on this model. 
+##### To determine the relationship between net worth of the billionaires and related characteristics, we first used a linear model to find a general relationship between the response variables and the predictors. The linear model generated had errors that were not normally distributed and hence, a transformation was required. However, applying log transformation to our response variable did not lead to normally distributed errors and therefore, we could not base our analysis on this model. 
 
 ##### Thus, our next approach was to use Randomization since it does not require the errors to be normally distributed. From the results, we decided that rank and year should be both excluded. 
 
@@ -285,7 +285,7 @@ summary(m2)
 plot(m2,  which = 1)
 ```
 
-##### Even we applied transformation, the plot still did not follow a linear trend. Therefore, we did a randomization test to see if the model is significant or not. 
+##### Even after we applied transformation, the plot still did not follow a linear trend. Therefore, we did a randomization test to see if the model is significant or not. 
 
 ##### randomizaiton 
 
@@ -416,7 +416,7 @@ summary(rand.test_none)
 ##### The coefficient of the original data falls outside of the 95% range of the distribution of randomization, so we reject the null hypothesis and conclude that the model is significant.  
 
 
-##### However, the evaluation plots for the linear model indicates that the model violates the Equal Variance assumption for residuals, the Normality assumption for data. Therefore, it is not advised to use the linear model in plotting the data. However, in the leverage plot, it shows that there is no data points in the set with a Cook’s distance greater than 0.5, which means that all data points in the set are not considered outliers at the 0.5 level. 
+##### However, the evaluation plots for the linear model indicates that the model violates the Equal Variance assumption for residuals and the Normality assumption for data. Therefore, it is not advised to use the linear model in plotting the data. However, in the leverage plot, it shows that there is no data points in the set with a Cook’s distance greater than 0.5, which means that all data points in the set are not considered outliers at the 0.5 level. 
 
 <br>
 

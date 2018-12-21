@@ -212,11 +212,28 @@ data_none_western <- filter(region_data, Western == "0")
 
 ```{r}
 with(region_data, table(Western, Sector))
-with(region_data, table(Western, Relation_to_Company))
-with(region_data, table(Western, Company_type))
-hist(Net_Worth_Billion$region_data)
 ```
 
+```{r}
+with(region_data, table(Western, Region))
+```
+
+```{r}
+with(region_data, table(Western, Company_type))
+```
+
+```{r}
+hist(region_data$Net_Worth_Billion)
+barplot(table(region_data$Sector), main = "Sector Distribution")
+barplot(table(region_data$Company_type), main = "Company_type Distribution")
+barplot(table(region_data$Region), main = "Region Distribution")
+```
+
+##### From the distribution of the Net_Worth_Billion, we can see that most billionaires have net worth smaller than 10 billion dollars, meaning that the difference of the response variable is mainly small. 
+
+##### The distribution of predictor Sector shows that there are a lot of different sectors
+
+##### 
 
 <br>
 

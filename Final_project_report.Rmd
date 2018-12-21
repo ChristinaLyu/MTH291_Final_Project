@@ -186,6 +186,24 @@ ggplot(final_data_1, aes(x = Age, y = Net_Worth_Billion)) +
 
 #### Deviding the Billionares into two groups: Western and None Western 
 
+```{r,include = FALSE, message=FALSE, warning=FALSE, result = FALSE}
+final_data[final_data$Sector == "Communications", ]
+
+final_data_1 <- final_data %>%
+  mutate(SectorCommunications = ifelse(Sector == "Communications", 1, 0)) %>%
+  mutate(SectorFashion = ifelse(Sector == "fashion", 1, 0)) %>%
+  mutate(SectorTechnology = ifelse(Sector == "technology", 1, 0)) %>%
+  mutate(SectorFinance = ifelse(Sector == "finance", 1, 0)) %>%
+  mutate(SectorSoftware = ifelse(Sector == "software", 1, 0)) %>%
+  mutate(Company_typeacquired = ifelse(Company_type == "acquired", 1, 0)) %>%
+  mutate(SectorOilRefining = ifelse(Sector == "oil refining", 1, 0))
+```
+
+```{r, include = FALSE, message=FALSE, warning=FALSE, result = FALSE}
+# omit NA values
+NA_final_data <- na.omit(final_data_1)
+```
+
 ```{r, include = FALSE, message=FALSE, warning=FALSE, result = FALSE}
 # select just 2014 data
 data_2014 <- filter(final_data, Year == "2014")
@@ -210,22 +228,59 @@ data_none_western <- filter(region_data, Western == "0")
 
 ```
 
-```{r}
-with(region_data, table(Western, Sector))
+```{r, include = FALSE, message=FALSE, warning=FALSE, result = FALSE}
+data_western <- data_western %>%
+  mutate(Chocolate = ifelse(Sector == "chocolates", 1, 0)) %>%
+  mutate(Vice_chairman = ifelse(Relationship_to_Company == 'founder/vice chairman', 1, 0)) %>%
+  mutate(Investment_via = ifelse(Sector == "investment (via holding company)", 1, 0))
+
+data_none_western <- data_none_western %>%
+  mutate(Commodities = ifelse(Sector == "commodities (sugar, cement flour)", 1, 0)) %>%
+  mutate(Apparel = ifelse(Sector == "apparel", 1, 0)) %>%
+  mutate(Construction_real_estate = ifelse(Sector == "construction/real estate", 1, 0)) %>%
+  mutate(Internet = ifelse(Sector == "internet", 1, 0)) %>%
+  mutate(Investment_banking_beer = ifelse(Sector == "investment banking/beer", 1, 0)) %>%
+  mutate(CEO = ifelse(Relationship_to_Company == "CEO", 1, 0)) 
 ```
 
-```{r}
+```{r, include = FALSE, message=FALSE, warning=FALSE, result = FALSE}
+na_data_western <- na.omit(data_western)
+```
+
+```{r, include = FALSE, message=FALSE, warning=FALSE, result = FALSE}
+na_none_western <- na.omit(data_none_western)
+```
+
+#### Number of Billionare in Each Sector 
+```{r, message=FALSE, warning=FALSE}
+with(region_data, table(Western, Sector))
+```
+#### Number of Billionare in Each Regrion
+```{r,message=FALSE, warning=FALSE}
 with(region_data, table(Western, Region))
 ```
 
-```{r}
+#### Number of Each Company Type
+```{r,message=FALSE, warning=FALSE}
 with(region_data, table(Western, Company_type))
 ```
-
-```{r}
+#### Distribution of Net Worth (billions)
+```{r,message=FALSE, warning=FALSE}
 hist(region_data$Net_Worth_Billion)
+```
+
+#### Distribution of Sector 
+```{r, message=FALSE, warning=FALSE}
 barplot(table(region_data$Sector), main = "Sector Distribution")
+```
+
+#### Distribution of Company Type
+```{r,message=FALSE, warning=FALSE}
 barplot(table(region_data$Company_type), main = "Company_type Distribution")
+```
+
+#### Distribution of Region 
+```{r,message=FALSE, warning=FALSE}
 barplot(table(region_data$Region), main = "Region Distribution")
 ```
 
@@ -252,18 +307,7 @@ with(summary(stepwise), data.frame(rsq, adjr2, cp, rss, bic, outmat))
 
 ##### We chose the model with nine variables because it has the highest adjusted R square, lowest cp and bic variable. The nine variables in the model are Year, Rank, Sector Communication, Sector Fashion, Sector Finance, Sector Software, Sector Technology, Company type acquired and Sector Oil Refining. 
 
-```{r,include = FALSE, message=FALSE, warning=FALSE, result = FALSE}
-final_data[final_data$Sector == "Communications", ]
 
-final_data_1 <- final_data %>%
-  mutate(SectorCommunications = ifelse(Sector == "Communications", 1, 0)) %>%
-  mutate(SectorFashion = ifelse(Sector == "fashion", 1, 0)) %>%
-  mutate(SectorTechnology = ifelse(Sector == "technology", 1, 0)) %>%
-  mutate(SectorFinance = ifelse(Sector == "finance", 1, 0)) %>%
-  mutate(SectorSoftware = ifelse(Sector == "software", 1, 0)) %>%
-  mutate(Company_typeacquired = ifelse(Company_type == "acquired", 1, 0)) %>%
-  mutate(SectorOilRefining = ifelse(Sector == "oil refining", 1, 0))
-```
 
 ```{r, message=FALSE, warning=FALSE}
 m <- lm(Net_Worth_Billion ~ Year + Rank + SectorCommunications + SectorFashion + SectorFinance + SectorSoftware + SectorTechnology + Company_typeacquired + SectorOilRefining, data = final_data_1)
@@ -294,10 +338,6 @@ $H_0_$ : ρ = 0
 
 $H_a_$ : ρ != 0
 
-```{r, include = FALSE, message=FALSE, warning=FALSE, result = FALSE}
-# omit NA values
-NA_final_data <- na.omit(final_data_1)
-```
 
 ```{r, message=FALSE, warning=FALSE}
 # coefficients of the original data 
@@ -333,20 +373,6 @@ with(summary(stepwise_none_western), data.frame(rsq, adjr2, cp, rss, bic, outmat
 
 ##### The best model for both is the nine variables model. Both have the highest adjusted R square, lowest cp and bic values. The nine variables for Western are Sector Chocolate, Relationship to Company founder/vice chairman, Sector Fashion, Sector Finance, Sector Investiment (via holding company), Sector Oil refining, Sector Software, Sector Technology, and Company type Acquired. The nine variables for None Western are Relationship to Company CEO, Relationship to Company chairman, Sector Apparel, Secto Commodities (sugar, cement, flour), Sector Communication, Sector construction/real estate, Sector construction/real estate/banking, Sector Internet, and Sector Investment banking/beer.
 
-```{r, include = FALSE, message=FALSE, warning=FALSE, result = FALSE}
-data_western <- data_western %>%
-  mutate(Chocolate = ifelse(Sector == "chocolates", 1, 0)) %>%
-  mutate(Vice_chairman = ifelse(Relationship_to_Company == 'founder/vice chairman', 1, 0)) %>%
-  mutate(Investment_via = ifelse(Sector == "investment (via holding company)", 1, 0))
-
-data_none_western <- data_none_western %>%
-  mutate(Commodities = ifelse(Sector == "commodities (sugar, cement flour)", 1, 0)) %>%
-  mutate(Apparel = ifelse(Sector == "apparel", 1, 0)) %>%
-  mutate(Construction_real_estate = ifelse(Sector == "construction/real estate", 1, 0)) %>%
-  mutate(Internet = ifelse(Sector == "internet", 1, 0)) %>%
-  mutate(Investment_banking_beer = ifelse(Sector == "investment banking/beer", 1, 0)) %>%
-  mutate(CEO = ifelse(Relationship_to_Company == "CEO", 1, 0)) 
-```
 
 #### Multiple Regression model for Western
 ```{r, message=FALSE, warning=FALSE}
@@ -358,10 +384,6 @@ plot(mod_western, which = 1)
 ```
 
 ##### The distribution is not normal so we applied randomization. 
-
-```{r, include = FALSE, message=FALSE, warning=FALSE, result = FALSE}
-na_data_western <- na.omit(data_western)
-```
 
 
 ```{r, message=FALSE, warning=FALSE}
@@ -391,11 +413,6 @@ plot(mod_none_western ,  which = 1)
 ```
 
 ##### The distribution is not normal so we applied randomization. 
-
-```{r, include = FALSE, message=FALSE, warning=FALSE, result = FALSE}
-na_none_western <- na.omit(data_none_western)
-```
-
 
 ```{r, message=FALSE, warning=FALSE}
 # coefficients of the original data 
